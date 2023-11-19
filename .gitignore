@@ -13,5 +13,4 @@ versions/
 test_data/
 vagrant/
 Manual.*
-include/compile_info.inc
-include/revision_number.inc
+.ccls-cache/

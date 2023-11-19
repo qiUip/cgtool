@@ -1,0 +1,8 @@
+#define PROJECT_VERSION_MAJOR 0
+#define PROJECT_VERSION_MINOR 5
+#define PROJECT_VERSION_PATCH 0
+#define COMPILER_VERSION "c++ 14.0.3.14030022"
+#define PROJECT_VERSION_COMMIT_HASH "4a0ba34"
+#define GIT_REMOTE_BRANCH "origin/master"
+#define GIT_REMOTE_URL "git@github.com:qiUip/cgtool.git"
+#define BUILD_DATETIME "2023-11-19 00:52:47"

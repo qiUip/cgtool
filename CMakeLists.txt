@@ -1,8 +1,28 @@
-cmake_minimum_required(VERSION 2.8.4)
+cmake_minimum_required(VERSION 3.12)
 
 project(CGTOOL)
-set(CGTOOL_VERSION_MAJOR 0)
-set(CGTOOL_VERSION_MINOR 5)
+
+# Find git to create version info
+find_package(Git)
+# Get latest Git tag
+execute_process(
+  COMMAND ${GIT_EXECUTABLE} describe --tags --abbrev=0
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_LATEST_TAG
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Parse the version components from the tag
+string(REGEX MATCH "v([0-9]+)\\.([0-9]+)(pre([0-9]+))?" VERSION_MATCHES "${GIT_LATEST_TAG}")
+
+# Set version
+set(VERSION_MAJOR ${CMAKE_MATCH_1})
+set(VERSION_MINOR ${CMAKE_MATCH_2})
+if (CMAKE_MATCH_4)
+  set(VERSION_PATCH ${CMAKE_MATCH_4})
+else()
+  set(VERSION_PATCH 0)
+endif()
 
 MESSAGE("CMAKE ${CMAKE_VERSION}")
 MESSAGE("CXX   ${CMAKE_SYSTEM_NAME} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
@@ -93,14 +113,6 @@ else()
     add_definitions(-DCMD_SIMPLE)
 endif()
 
-# Find Python to create compilation info
-find_package(PythonInterp 2.6 REQUIRED)
-message("-- Generating compilation info...")
-execute_process(COMMAND python
-                ${CMAKE_CURRENT_SOURCE_DIR}/src/compile_info.py
-                ${CMAKE_CURRENT_SOURCE_DIR}/include/compile_info.inc
-                ${CMAKE_CURRENT_SOURCE_DIR}/include/revision_number.inc)
-
 # Add target for documentation if we have Doxygen
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
@@ -111,6 +123,45 @@ if(DOXYGEN_FOUND)
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc
         COMMENT "Generating API documentation with Doxygen" VERBATIM)
 endif(DOXYGEN_FOUND)
+
+# Get Git revision
+execute_process(
+  COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_COMMIT_HASH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get Git remote and branch
+execute_process(
+  COMMAND ${GIT_EXECUTABLE} rev-parse --abbrev-ref --symbolic-full-name @{u}
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_REMOTE_BRANCH
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get Git remote URL and branch
+execute_process(
+  COMMAND ${GIT_EXECUTABLE} remote get-url origin
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE GIT_REMOTE_URL
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+# Get current date and time
+string(TIMESTAMP BUILD_DATETIME "%Y-%m-%d %H:%M:%S")
+
+# Get C++ compiler name and version
+get_filename_component(COMPILER_NAME "${CMAKE_CXX_COMPILER}" NAME_WE)
+set(COMPILER_VERSION "${CMAKE_CXX_COMPILER_VERSION}")
+# Combine compiler name and version
+set(FULL_COMPILER_VERSION "${COMPILER_NAME} ${COMPILER_VERSION}")
+
+# Configure a header file to pass the version number to the source code
+configure_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/version.h.in"
+  "${CMAKE_CURRENT_SOURCE_DIR}/include/version.h"
+)
 
 # Find source files
 set(CGTOOLCORE_FILES
