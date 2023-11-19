@@ -152,10 +152,9 @@ execute_process(
 string(TIMESTAMP BUILD_DATETIME "%Y-%m-%d %H:%M:%S")
 
 # Get C++ compiler name and version
-get_filename_component(COMPILER_NAME "${CMAKE_CXX_COMPILER}" NAME_WE)
-set(COMPILER_VERSION "${CMAKE_CXX_COMPILER_VERSION}")
-# Combine compiler name and version
-set(FULL_COMPILER_VERSION "${COMPILER_NAME} ${COMPILER_VERSION}")
+set(FULL_COMPILER_VERSION "${CMAKE_SYSTEM_NAME} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
+# # Combine compiler name and version
+# set(FULL_COMPILER_VERSION "${COMPILER_NAME} ${COMPILER_VERSION}")
 
 # Configure a header file to pass the version number to the source code
 configure_file(
