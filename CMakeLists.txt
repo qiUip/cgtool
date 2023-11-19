@@ -15,7 +15,6 @@ execute_process(
 # Parse the version components from the tag
 string(REGEX MATCH "v([0-9]+)\\.([0-9]+)(\\.([0-9]+))?((pre)?([0-9]+))?" VERSION_MATCHES "${GIT_LATEST_TAG}")
 
-
 # Set version
 set(VERSION_MAJOR ${CMAKE_MATCH_1})
 set(VERSION_MINOR ${CMAKE_MATCH_2})
