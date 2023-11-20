@@ -14,4 +14,5 @@ test_data/
 vagrant/
 Manual.*
 .ccls-cache/
-include/version.h
+src/version.h
+RSE.org

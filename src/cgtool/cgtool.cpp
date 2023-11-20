@@ -13,7 +13,7 @@ using std::string;
 using std::vector;
 
 int main(const int argc, const char *argv[]){
-    /// Define version as a string
+    // Define version as a string
     const std::string version_string = "CGTOOL v" + std::to_string(PROJECT_VERSION_MAJOR) + "." +
                               std::to_string(PROJECT_VERSION_MINOR) + "." +
                               std::to_string(PROJECT_VERSION_PATCH) ;
