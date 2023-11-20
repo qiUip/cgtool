@@ -1,20 +1,16 @@
-#include <string>
+#include <iostream>
 #include <vector>
-
 #include "ramsi.h"
-
 #include "small_functions.h"
-
-using std::string;
-using std::vector;
+#include "version.h"
 
 int main(const int argc, const char *argv[]){
-    const string version_string =
-            "RAMSi v0.5pre"
-            #include "revision_number.inc"
-    ;
+    const std::string version_string = "RAMSi v" + std::to_string(PROJECT_VERSION_MAJOR) + "." +
+                              std::to_string(PROJECT_VERSION_MINOR) + "." +
+                              std::to_string(PROJECT_VERSION_PATCH) ;
 
-    const string help_header =
+
+    const std::string help_header =
             "James Graham <J.A.Graham@soton.ac.uk> University of Southampton\n\n"
             "Performs several analysis functions for biomembrane simulations in GROMACS.\n\n"
             "Requires GROMACS XTC and GRO files from the simulation and a configuration\n"
@@ -24,21 +20,23 @@ int main(const int argc, const char *argv[]){
             "ramsi -c <CFG file> -x <XTC file> -g <GRO file>\n";
     // Option syntax is <long flag> \t <comment> \t <flag type> [ \t <default value>]
     // Flag types are 0 - path, 1 - string, 2 - int, 3 - float, 4 - bool
-    const string help_options =
+    const std::string help_options =
             "--cfg\tRAMSi config file\t0\n"
             "--xtc\tGROMACS XTC file\t0\n"
             "--gro\tGROMACS GRO file\t0\n"
             "--frames\tNumber of frames\t1\t-1";
 
-    const string compile_info =
-            #include "compile_info.inc"
-    ;
+    std::stringstream compile_info_str;
+    compile_info_str << "Compiled on " << COMPILER_VERSION << " at " << BUILD_DATETIME << "\n" <<
+                              "Commit: " << PROJECT_VERSION_COMMIT_HASH << "\n" <<
+                              "From: " << GIT_REMOTE_URL << " - " << GIT_REMOTE_BRANCH;
+    const std::string compile_info = compile_info_str.str();
 
     Ramsi ramsi;
     ramsi.setHelpStrings(version_string, help_header, help_options, compile_info);
 
-    vector<string> req_files = {"cfg", "xtc", "gro"};
-    vector<string> opt_files = {};
+    std::vector<std::string> req_files = {"cfg", "xtc", "gro"};
+    std::vector<std::string> opt_files = {};
 
     ramsi.collectInput(argc, argv, req_files, opt_files);
     return ramsi.run();

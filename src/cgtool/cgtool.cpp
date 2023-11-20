@@ -1,24 +1,22 @@
-#include "cgtool.h"
-
 #include <sysexits.h>
-
+#include <iostream>
 #include <boost/algorithm/string.hpp>
-
+#include "cgtool.h"
 #include "itp_writer.h"
-
 #include "GROOutput.h"
 #include "LammpsDataOutput.h"
 #include "XTCOutput.h"
 #include "LammpsTrjOutput.h"
+#include "version.h"
 
 using std::string;
 using std::vector;
 
 int main(const int argc, const char *argv[]){
-    const string version_string =
-            "CGTOOL v0.5pre"
-            #include "revision_number.inc"
-    ;
+    // Define version as a string
+    const std::string version_string = "CGTOOL v" + std::to_string(PROJECT_VERSION_MAJOR) + "." +
+                              std::to_string(PROJECT_VERSION_MINOR) + "." +
+                              std::to_string(PROJECT_VERSION_PATCH) ;
 
     const string help_header =
             "CGTOOL James Graham <J.A.Graham@soton.ac.uk> University of Southampton\n\n"
@@ -40,9 +38,11 @@ int main(const int argc, const char *argv[]){
             "--fld\tGROMACS forcefield file\t0\n"
             "--frames\tNumber of frames to read\t1\t-1";
 
-    const string compile_info =
-            #include "compile_info.inc"
-    ;
+    std::stringstream compile_info_str;
+    compile_info_str << "Compiled on " << COMPILER_VERSION << " at " << BUILD_DATETIME << "\n" <<
+                              "Commit: " << PROJECT_VERSION_COMMIT_HASH << "\n" <<
+                              "From: " << GIT_REMOTE_URL << " - " << GIT_REMOTE_BRANCH;
+    const std::string compile_info = compile_info_str.str();
 
     Cgtool cgtool;
     cgtool.setHelpStrings(version_string, help_header, help_options, compile_info);

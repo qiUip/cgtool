@@ -1,4 +1,4 @@
-#include "bondset.h"
+#include "cgtool/bondset.h"
 
 #include <vector>
 
