@@ -20,6 +20,7 @@ To download and build CGTOOL, the following is required
 * CMake 3.12 or newer
 * C++ compiler supporting the C++11 standard
 * Boost C++ libraries (program\_options module recommended but optional)
+* Python version 2.3 or newer (for gtest-1.7.0)
 * Optional: Doxygen to build developer documentation
 
 ### Obtaining the code
@@ -59,7 +60,8 @@ ramsi  -c <CFG file> -x <XTC file> -g <GRO file>
 ### Testing
 Currently only a few source files have complete unit tests.  Integration tests ensure that the program compiles successfully and produces correct output for a test dataset.
 
-An option to test the build upon compilation is available with `make check`. Alternatively, to test after compilation execute `ctest`, or `ctest -V` for more verbose testing.
+An option to test the build upon compilation is available with `make check` or `make check-v` for more verbose testing.
 
 ### Contact
 * James Graham: <J.A.Graham@soton.ac.uk>
+  
