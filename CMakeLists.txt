@@ -273,9 +273,17 @@ add_test(IntegrationGRO ${CMAKE_COMMAND} -E compare_files
 add_test(IntegrationTOP ${CMAKE_COMMAND} -E compare_files
   ${TEST_OUTPUT_DIRECTORY}/Temporary/ALLA.top ${CMAKE_SOURCE_DIR}/test_data/ALLA/ALLACG.top)
 
+# Custom target for cleaning up temporary files after all tests
+add_custom_target(clean_temporary_files ALL
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_OUTPUT_DIRECTORY}/Temporary
+  COMMENT "Cleaning up temporary files after tests"
+  VERBATIM
+)
+# Set POST_BUILD option for the cleanup target
+set_target_properties(clean_temporary_files PROPERTIES POST_BUILD COMMAND ${CMAKE_COMMAND} -E remove_directory ${TEST_OUTPUT_DIRECTORY}/Temporary)
 
 enable_testing()
 add_custom_target(check COMMAND ${CMAKE_CTEST_COMMAND}
-                  DEPENDS gtest_parser gtest_bondset gtest_light_array gtest_small_functions cgtool ramsi)
+                  DEPENDS gtest_parser gtest_bondset gtest_light_array gtest_small_functions cgtool ramsi clean_temporary_files)
 add_custom_target(check-v COMMAND ${CMAKE_CTEST_COMMAND} "-V"
-                  DEPENDS gtest_parser gtest_bondset gtest_light_array gtest_small_functions cgtool ramsi)
+                  DEPENDS gtest_parser gtest_bondset gtest_light_array gtest_small_functions cgtool ramsi clean_temporary_files)
