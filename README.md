@@ -37,17 +37,22 @@ cd cgtool && mkdir build && cd build
 * To build the developer documentation execute `make doc` (requires Doxygen)
 
 ## Use
-CGTOOL
-* Help text is available with `cgtool -h` or `cgtool --help`
-* Required inputs are a GROMACS GRO and XTC file and a config file
-* The program should be called using `cgtool -c <cfg file> -x <xtc file> -g <gro file>` (order not important)
+### CGTOOL
+* The program requires a CFG config file, a XTC file and a GROMACS GRO file. To call it use the following command (order of options not important):
+```
+cgtool -c <CFG file> -x <XTC file> -g <GRO file>
+```
 * An optional GROMACS ITP file may be provided with the `-i <itp file>` option to allow calculation of charges
 * The config file specifies the mapping to be applied, an example is present in the test\_data directory
+* Help text is available with `cgtool -h` or `cgtool --help`
 
-RAMSi
+### RAMSi
+* The program requires a CFG config file, a XTC file and a GROMACS GRO file. To call it use the following command (order of options not important):
+```
+ramsi  -c <CFG file> -x <XTC file> -g <GRO file>
+```
+* The config file specifies the mapping to be applied, an example is present in the test\_data directory
 * Help text is available with `ramsi -h` or `ramsi --help`
-* The program should be called using `ramsi  -c <CFG file> -x <XTC file> -g <GRO file>` (order not important)
-* A config file is required which specifies the analysis options, in the format seen in the examples directory
 
 ### Testing
 Currently only a few source files have complete unit tests.  Integration tests ensure that the program compiles successfully and produces correct output for a test dataset.
