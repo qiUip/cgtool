@@ -13,7 +13,8 @@ These programs are work-in-progress.
 
 Input is GROMACS XTC and GRO files, along with a custom config file based which specifies options for the analysis.  Membrane properties can be averaged over the complete simulation trajectory or output in batches.  An example config file lists the available options.
 
-## Dependencies
+## Install
+### Dependencies
 To download and build CGTOOL, the following is required
 * git installed on the system
 * CMake 3.12 or newer
@@ -21,12 +22,13 @@ To download and build CGTOOL, the following is required
 * Boost C++ libraries (program\_options module recommended but optional)
 * Optional: Doxygen to build developer documentation
 
-## Install
+### Obtaining the code
 The following works on all UNIX-like systems (Linux / macOS) 
 * Clone this repository
 ```
 git clone https://github.com/qiUip/cgtool.git
 ```
+### Build
 To compile the program:
 * `cd` into the main distribution directory 'cgtool', make a new directory 'build' and `cd` into it
 ```
