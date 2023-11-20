@@ -2,8 +2,7 @@
 **Please consider using the Python implementation PyCGTOOL at [https://github.com/jag1g13/pycgtool](https://github.com/jag1g13/pycgtool) as it has several advantages over this version.**
 
 # CGTOOL v0.5
-## README
-
+## About the project
 The aim of this project is to provide a tool to aid in parametrising coarse-grained (CG) molecular mechanics models.  CGTOOL generates coarse-grained models from atomistic trajectories using a user-provided mapping.  Equilibrium values and force constants of bonded terms are calculated by Boltzmann Inversion of histograms collected from the input trajectory allowing good replication of target properties.
 Input is GROMACS XTC and GRO files, along with a custom config file based which specifies the mapping and other parameters.
 The output is a GROMACS/MARTINI style forcefield file and a coarse-grained representation of the system created in GROMACS GRO format to allow initial simulations to be started with minimal hand tuning.
@@ -14,7 +13,7 @@ These programs are work-in-progress.
 
 Input is GROMACS XTC and GRO files, along with a custom config file based which specifies options for the analysis.  Membrane properties can be averaged over the complete simulation trajectory or output in batches.  An example config file lists the available options.
 
-### Dependencies
+## Dependencies
 To download and build CGTOOL, the following is required
 * git installed on the system
 * CMake 3.12 or newer
@@ -22,7 +21,7 @@ To download and build CGTOOL, the following is required
 * Boost C++ libraries (program\_options module recommended but optional)
 * Optional: Doxygen to build developer documentation
 
-### Install
+## Install
 The following works on all UNIX-like systems (Linux / macOS) 
 * Clone this repository
 ```
@@ -37,7 +36,7 @@ cd cgtool && mkdir build && cd build
 * To build the executable and library execute `make`.  After compilation the executable can be found in the 'bin' directory and the library in the 'lib' directory.
 * To build the developer documentation execute `make doc` (requires Doxygen)
 
-### Use
+## Use
 CGTOOL
 * Help text is available with `cgtool -h` or `cgtool --help`
 * Required inputs are a GROMACS GRO and XTC file and a config file
