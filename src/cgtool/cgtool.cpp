@@ -4,7 +4,7 @@
 #include "LammpsTrjOutput.h"
 #include "XTCOutput.h"
 #include "itp_writer.h"
-#include "version.h"
+#include "../version.h"
 #include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <sysexits.h>
@@ -15,10 +15,10 @@ using std::vector;
 int main(const int argc, const char *argv[])
 {
     // Define version as a string
-    std::stringstream version_string_str;
-    version_string_str << "GCTOOL v" << PROJECT_VERSION_MAJOR << "."
-                     << PROJECT_VERSION_MINOR << "." << PROJECT_VERSION_PATCH;
-    const std::string version_string = version_string_str.str();
+    const std::string version_string =
+        "CGTOOL v" + std::to_string(PROJECT_VERSION_MAJOR) + "." +
+        std::to_string(PROJECT_VERSION_MINOR) + "." +
+        std::to_string(PROJECT_VERSION_PATCH);
 
     const string help_header =
         "CGTOOL James Graham <J.A.Graham@soton.ac.uk> University of "
