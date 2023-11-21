@@ -23,5 +23,6 @@ jobs:
         mkdir build
         cd build
         cmake ..
+        git describe --tags --abbrev=0
         cat ../src/version.h
         make check
