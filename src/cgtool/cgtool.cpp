@@ -4,9 +4,10 @@
 #include "LammpsTrjOutput.h"
 #include "XTCOutput.h"
 #include "itp_writer.h"
-#include "../version.h"
+#include "version.h"
 #include <boost/algorithm/string.hpp>
 #include <iostream>
+#include <string>
 #include <sysexits.h>
 
 using std::string;

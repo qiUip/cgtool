@@ -1,8 +1,9 @@
 #include "ramsi.h"
 #include "small_functions.h"
-#include "../version.h"
+#include "version.h"
 #include <iostream>
 #include <vector>
+#include <string>
 
 int main(const int argc, const char *argv[])
 {
