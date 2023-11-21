@@ -6,6 +6,7 @@
 #define CGTOOL_TRJINPUT_H
 
 #include <string>
+#include <stdexcept>
 
 #include "frame.h"
 #include "residue.h"

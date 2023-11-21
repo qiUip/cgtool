@@ -192,7 +192,7 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
     int n_vals = 0;
 
 #pragma omp parallel for default(none) \
- shared(frame, ref, pairs, closest, ref_cache, ref_lookup, prot_cache, resPPL) \
+ shared(frame, ref, pairs, closest, ref_cache, ref_lookup, prot_cache, resPPL, box_diag2, ref_len, prot_len) \
  reduction(+: sum, n_vals)
     for(int i=0; i<grid_; i++){
         array<double, 3> grid_coords;

@@ -5,6 +5,7 @@
 #include "LammpsTrjOutput.h"
 
 #include <cstdio>
+#include <stdexcept>
 
 #include "small_functions.h"
 
