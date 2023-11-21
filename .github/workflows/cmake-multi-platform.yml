@@ -21,9 +21,10 @@ jobs:
 
     - name: Debug Compiler and Environment
       run: |
-      echo "Compiler Version: $(${CXX} --version)"
-      echo "CMake Version: $(cmake --version)"
-      echo "Environment: $(uname -a)"
+        echo "Compiler Version: $(${CXX} --version)"
+        echo "CMake Version: $(cmake --version)"
+        echo "Environment: $(uname -a)"
+      shell: bash
 
     - name: Configure, build, and test
       run: |
