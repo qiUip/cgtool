@@ -24,16 +24,4 @@ jobs:
         mkdir build
         cd build
         cmake ..
-        cmake --build .
-        ctest
-
-  cleanup:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Cleanup temporary files
-      run: |
-        rm -rf Testing
-
+        make check
