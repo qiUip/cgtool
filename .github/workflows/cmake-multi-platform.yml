@@ -19,16 +19,10 @@ jobs:
     - name: Install Boost
       run: sudo apt-get install -y libboost-all-dev
 
-    - name: Debug Compiler and Environment
-      run: |
-        echo "Compiler Version: $(${CXX} --version)"
-        echo "CMake Version: $(cmake --version)"
-        echo "Environment: $(uname -a)"
-      shell: bash
-
     - name: Configure, build, and test
       run: |
         mkdir build
         cd build
         cmake ..
+        cat ../src/include.h
         make check
