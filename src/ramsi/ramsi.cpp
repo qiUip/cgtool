@@ -1,16 +1,16 @@
 #include "ramsi.h"
 #include "small_functions.h"
-#include "version.h"
+#include "../version.h"
 #include <iostream>
 #include <vector>
 
 int main(const int argc, const char *argv[])
 {
     // Define version as a string
-    std::stringstream version_string_str;
-    version_string_str << "GCTOOL v" << PROJECT_VERSION_MAJOR << "."
-                       << PROJECT_VERSION_MINOR << "." << PROJECT_VERSION_PATCH;
-    const std::string version_string = version_string_str.str();
+    const std::string version_string =
+        "RAMSi v" + std::to_string(PROJECT_VERSION_MAJOR) + "." +
+        std::to_string(PROJECT_VERSION_MINOR) + "." +
+        std::to_string(PROJECT_VERSION_PATCH);
 
     const std::string help_header =
         "James Graham <J.A.Graham@soton.ac.uk> University of Southampton\n\n"
