@@ -7,7 +7,8 @@
 
 #include "trj_output.h"
 
-class LammpsTrjOutput : public TrjOutput{
+class LammpsTrjOutput : public TrjOutput
+{
 protected:
     /** \brief Output file handle. */
     FILE *file_ = nullptr;
@@ -16,6 +17,7 @@ protected:
     int openFile(const std::string &filename);
     /** \brief Close output file. */
     int closeFile();
+
 public:
     /** \brief Constructor.  Calls openFile() .*/
     LammpsTrjOutput(const int natoms, const std::string &filename);
@@ -28,5 +30,4 @@ public:
     friend class Frame;
 };
 
-
-#endif //CGTOOL_LAMMPSTRJOUTPUT_H
+#endif // CGTOOL_LAMMPSTRJOUTPUT_H

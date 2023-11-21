@@ -1,18 +1,18 @@
 #ifndef FRAME_H_
 #define FRAME_H_
 
-#include <vector>
-#include <string>
 #include <array>
+#include <string>
+#include <vector>
 
 #include "residue.h"
 
 class TrjOutput;
 class TrjInput;
 
-
 /** \brief Struct to keep track of which data have been loaded into atoms */
-struct AtomsHave{
+struct AtomsHave
+{
     /** \brief Atoms have been created */
     bool created = false;
     /** \brief Atoms have been assigned a type */
@@ -32,7 +32,8 @@ struct AtomsHave{
 };
 
 /** \brief Struct to hold atom data */
-struct Atom{
+struct Atom
+{
     /** Atomic coordinates in x, y, z */
     std::array<double, 3> coords = {{0., 0., 0.}};
     /** Atom dipole components in x, y, z and magnitude */
@@ -57,14 +58,19 @@ struct Atom{
     int resnum = 0;
 };
 
-enum class BoxType{CUBIC, TRICLINIC};
+enum class BoxType
+{
+    CUBIC,
+    TRICLINIC
+};
 
 /**
-* \brief Class to hold a single frame of an XTC file
-*
-* Holds a std::vector<Atom> and contains member functions to operate on this
-*/
-class Frame{
+ * \brief Class to hold a single frame of an XTC file
+ *
+ * Holds a std::vector<Atom> and contains member functions to operate on this
+ */
+class Frame
+{
 protected:
     /** Has the XTC output been setup yet? */
     bool outputSetup_ = false;
@@ -80,7 +86,7 @@ protected:
 
     /** \brief Perform wraparound to put all atoms in box.
      * Equivalent to GROMACS trjconv -pbc atom */
-    void pbcAtom(int natoms=-1);
+    void pbcAtom(int natoms = -1);
 
     /** \brief Write the minimal GROMACS TOP file */
     void writeTOP(const std::string &filename);
@@ -106,51 +112,55 @@ public:
     std::vector<Residue> &residues_;
 
     /** \brief Create Frame passing config files.
-    * Replaces calls to the function Frame::setupFrame() */
+     * Replaces calls to the function Frame::setupFrame() */
     Frame(const std::string &xtcname, const std::string &groname,
           std::vector<Residue> &residues);
 
-    Frame(const Frame &frame) : name_(frame.name_), boxType_(frame.boxType_),
-                                time_(frame.time_), num_(frame.num_), step_(frame.step_),
-                                residues_(frame.residues_){}
+    Frame(const Frame &frame)
+        : name_(frame.name_), boxType_(frame.boxType_), time_(frame.time_),
+          num_(frame.num_), step_(frame.step_), residues_(frame.residues_)
+    {
+    }
 
-    Frame(const Frame &frame, std::vector<Residue> &residues) :
-                                name_(frame.name_), boxType_(frame.boxType_),
-                                time_(frame.time_), num_(frame.num_), step_(frame.step_),
-                                residues_(frame.residues_){}
+    Frame(const Frame &frame, std::vector<Residue> &residues)
+        : name_(frame.name_), boxType_(frame.boxType_), time_(frame.time_),
+          num_(frame.num_), step_(frame.step_), residues_(frame.residues_)
+    {
+    }
 
     /** \brief Create Frame by copying data from another Frame
-    * Intended for creating a CG Frame from an atomistic one.  Atoms are not copied. */
-    Frame(const Frame &frame, std::vector<Residue> *residues=nullptr);
+     * Intended for creating a CG Frame from an atomistic one.  Atoms are not
+     * copied. */
+    Frame(const Frame &frame, std::vector<Residue> *residues = nullptr);
 
     /** \brief Destructor to free memory allocated by XDR functions */
     ~Frame();
 
-
     /**
-    * \brief Read a frame from the XTC file into an existing Frame object
-    *
-    * Reads a frame into a pre-setup Frame object.
-    * The same Frame object should be used for each frame to save time in allocation.
-    */
+     * \brief Read a frame from the XTC file into an existing Frame object
+     *
+     * Reads a frame into a pre-setup Frame object.
+     * The same Frame object should be used for each frame to save time in
+     * allocation.
+     */
     bool readNext();
 
     void initFromITP(const std::string &topname);
     void initFromFLD(const std::string &fldname);
 
     /**
-    * \brief Prepare to write XTC output.
-    * \throws std::runtime_error if memory cannot be allocated for atom array
-    * \throws std::runtime_error if output TOP file cannot be opened
-    * Allocate necessary atom array and create TOP file.
-    */
-    void setupOutput(std::string xtcnameout="", std::string top="");
+     * \brief Prepare to write XTC output.
+     * \throws std::runtime_error if memory cannot be allocated for atom array
+     * \throws std::runtime_error if output TOP file cannot be opened
+     * Allocate necessary atom array and create TOP file.
+     */
+    void setupOutput(std::string xtcnameout = "", std::string top = "");
 
     /** \brief Output frame to trajectory file. */
     bool outputTrajectoryFrame(TrjOutput &output);
 
     /** \brief Print info for all atoms up to n.  Default print all. */
-    void printAtoms(int natoms=-1) const;
+    void printAtoms(int natoms = -1) const;
 
     /** \brief Print box vectors */
     void printBox() const;

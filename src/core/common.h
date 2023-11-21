@@ -5,22 +5,24 @@
 #ifndef CGTOOL_COMMON_H
 #define CGTOOL_COMMON_H
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
-#include "residue.h"
-#include "frame.h"
 #include "cg_map.h"
-#include "parser.h"
 #include "cmd.h"
+#include "frame.h"
+#include "parser.h"
+#include "residue.h"
 
-struct CheckedFile{
+struct CheckedFile
+{
     std::string name = "";
-    bool exists = false;
+    bool exists      = false;
 };
 
-class Common{
+class Common
+{
 protected:
     // Help texts
     std::string versionString_;
@@ -37,31 +39,34 @@ protected:
     std::map<std::string, CheckedFile> inputFiles_;
 
     // Run control
-    int currFrame_ = 1;
-    int numFramesMax_ = 0;
+    int currFrame_      = 1;
+    int numFramesMax_   = 0;
     int wholeXTCFrames_ = -1;
-    bool untilEnd_ = true;
+    bool untilEnd_      = true;
     std::map<std::string, std::map<std::string, int>> settings_;
 
     // Objects
     std::vector<Residue> residues_;
     std::vector<Residue> cgResidues_;
-    Frame    *frame_ = nullptr;
-    Frame    *cgFrame_ = nullptr;
-    CGMap    *cgMap_ = nullptr;
+    Frame *frame_   = nullptr;
+    Frame *cgFrame_ = nullptr;
+    CGMap *cgMap_   = nullptr;
 
     // Progress updates
     const int updateFreq_[10] = {1, 2, 5, 10, 20, 50, 100, 200, 500, 1000};
-    int updateLoc_ = 0;
+    int updateLoc_            = 0;
 
     // Protected functions
-    /** \brief Read config file and determine which functions should be performed */
+    /** \brief Read config file and determine which functions should be
+     * performed */
     virtual void readConfig() = 0;
 
-    /** \brief Read residues from config file - will be modified by frame later */
+    /** \brief Read residues from config file - will be modified by frame later
+     */
     void getResidues();
 
-    /** \brief Construct objects which are required to perform requested functions */
+    /** \brief Construct objects which are required to perform requested
+     * functions */
     virtual void setupObjects() = 0;
 
     /** \brief Prepare for and run the main calculation loop */
@@ -70,7 +75,8 @@ protected:
     /** \brief Update progress timer within the main loop */
     void updateProgress();
 
-    /** \brief Function executed within the main loop - performs most significant work*/
+    /** \brief Function executed within the main loop - performs most
+     * significant work*/
     virtual void mainLoop() = 0;
 
     /** \brief Perform final calculations and end program */
@@ -93,4 +99,4 @@ public:
     int run();
 };
 
-#endif //CGTOOL_COMMON_H
+#endif // CGTOOL_COMMON_H

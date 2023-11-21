@@ -9,19 +9,23 @@
 
 #include "membrane.h"
 
-class Ramsi : public Common{
+class Ramsi : public Common
+{
 protected:
     Membrane *membrane_ = nullptr;
     std::vector<double> thickness_;
 
     // Protected functions
-    /** \brief Read config file and determine which functions should be performed */
+    /** \brief Read config file and determine which functions should be
+     * performed */
     void readConfig();
 
-    /** \brief Construct objects which are required to perform requested functions */
+    /** \brief Construct objects which are required to perform requested
+     * functions */
     void setupObjects();
 
-    /** \brief Function executed within the main loop - performs most significant work*/
+    /** \brief Function executed within the main loop - performs most
+     * significant work*/
     void mainLoop();
 
     /** \brief Perform final calculations and end program */
@@ -32,4 +36,4 @@ public:
     virtual ~Ramsi();
 };
 
-#endif //RAMSI_RAMSI_H
+#endif // RAMSI_RAMSI_H

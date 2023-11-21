@@ -8,7 +8,8 @@
 #include "trj_output.h"
 #include "xdrfile.h"
 
-class XTCOutput : public TrjOutput{
+class XTCOutput : public TrjOutput
+{
 protected:
     /** \brief Stores atoms copied from Frame. */
     rvec *x_ = nullptr;
@@ -21,6 +22,7 @@ protected:
     int openFile(const std::string &filename);
     /** \brief Close output file. */
     int closeFile();
+
 public:
     /** \brief Constructor.  Calls openFile(). */
     XTCOutput(const int natoms, const std::string &filename);
@@ -33,4 +35,4 @@ public:
     friend class Frame;
 };
 
-#endif //CGTOOL_XTCOUTPUT_H
+#endif // CGTOOL_XTCOUTPUT_H

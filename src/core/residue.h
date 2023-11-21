@@ -5,10 +5,11 @@
 #ifndef CGTOOL_RESIDUE_H
 #define CGTOOL_RESIDUE_H
 
-#include <string>
 #include <map>
+#include <string>
 
-class Residue{
+class Residue
+{
 public:
     /** \brief Name of this residue */
     std::string resname = "";
@@ -37,7 +38,7 @@ public:
     ~Residue(){};
 
     /** \brief Copy constructor */
-    Residue& operator=(const Residue other);
+    Residue &operator=(const Residue other);
 
     /** \brief Calcaulate the total number of atoms */
     void calc_total();
@@ -61,7 +62,7 @@ public:
     void set_total_atoms(const int val);
 
     /** \brief Print information about this residue */
-    void print(const bool extra=false) const;
+    void print(const bool extra = false) const;
 };
 
-#endif //CGTOOL_RESIDUE_H
+#endif // CGTOOL_RESIDUE_H

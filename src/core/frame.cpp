@@ -5,47 +5,56 @@
 #include <assert.h>
 #include <sysexits.h>
 
+#include "GROInput.h"
+#include "XTCInput.h"
 #include "parser.h"
 #include "small_functions.h"
-#include "XTCInput.h"
-#include "GROInput.h"
 #include "trj_output.h"
 
+using std::endl;
+using std::map;
+using std::printf;
+using std::stof;
 using std::string;
 using std::vector;
-using std::endl;
-using std::stof;
-using std::printf;
-using std::map;
 
 Frame::Frame(const string &xtcname, const string &groname,
-      vector<Residue> &residues) : residues_(residues){
-    if(!initFromGRO(groname)){
+             vector<Residue> &residues)
+    : residues_(residues)
+{
+    if (!initFromGRO(groname))
+    {
         printf("ERROR: Something went wrong with reading GRO file\n");
         exit(EX_UNAVAILABLE);
     };
 
-    trjIn_ = new XTCInput(xtcname);
+    trjIn_   = new XTCInput(xtcname);
     isSetup_ = true;
 };
 
-Frame::~Frame(){
+Frame::~Frame()
+{
     isSetup_ = false;
-    if(trjIn_) delete trjIn_;
+    if (trjIn_)
+        delete trjIn_;
 }
 
-void Frame::setupOutput(string xtcname, string topname){
-    if(topname == "") topname = residues_[0].resname + ".top";
+void Frame::setupOutput(string xtcname, string topname)
+{
+    if (topname == "")
+        topname = residues_[0].resname + ".top";
 
     writeTOP(topname);
     outputSetup_ = true;
 }
 
-void Frame::writeTOP(const string &filename){
+void Frame::writeTOP(const string &filename)
+{
     backup_old_file(filename);
 
     std::ofstream top(filename);
-    if(!top.is_open()) throw std::runtime_error("Could not open output TOP file");
+    if (!top.is_open())
+        throw std::runtime_error("Could not open output TOP file");
 
     top << "; Include forcefield parameters" << endl;
     top << "#include \"" << residues_[0].resname << ".itp\"" << endl << endl;
@@ -57,13 +66,16 @@ void Frame::writeTOP(const string &filename){
     top.close();
 }
 
-bool Frame::outputTrajectoryFrame(TrjOutput &output){
-    if(!outputSetup_) throw std::logic_error("Output has not been setup");
+bool Frame::outputTrajectoryFrame(TrjOutput &output)
+{
+    if (!outputSetup_)
+        throw std::logic_error("Output has not been setup");
 
     return output.writeFrame(*this) == 0;
 }
 
-bool Frame::initFromGRO(const string &groname){
+bool Frame::initFromGRO(const string &groname)
+{
     GROInput in(groname);
     numAtoms_ = in.getNumAtoms();
     atoms_.resize(numAtoms_);
@@ -73,20 +85,30 @@ bool Frame::initFromGRO(const string &groname){
     in.readResidues(residues_);
 
     // Create diciontary of residues
-    for(Residue &res : residues_){
-        if(res.resname == "PROT") continue;
+    for (Residue &res : residues_)
+    {
+        if (res.resname == "PROT")
+            continue;
 
-        for(int i=0; i<res.num_atoms; i++){
+        for (int i = 0; i < res.num_atoms; i++)
+        {
             const int atom = res.start + i;
-            res.name_to_num.insert(std::pair<string, int>(atoms_[atom].atom_name, i));
+            res.name_to_num.insert(
+                std::pair<string, int>(atoms_[atom].atom_name, i));
         }
 
-        if(res.ref_atom_name != ""){
-            if(res.name_to_num.find(res.ref_atom_name) == res.name_to_num.end()){
-                printf("ERROR: Residue %6s does not contain reference atom %6s\n",
-                       res.resname.c_str(), res.ref_atom_name.c_str());
+        if (res.ref_atom_name != "")
+        {
+            if (res.name_to_num.find(res.ref_atom_name) ==
+                res.name_to_num.end())
+            {
+                printf(
+                    "ERROR: Residue %6s does not contain reference atom %6s\n",
+                    res.resname.c_str(), res.ref_atom_name.c_str());
                 exit(EX_CONFIG);
-            }else {
+            }
+            else
+            {
                 res.ref_atom = res.name_to_num.at(res.ref_atom_name);
             }
         }
@@ -95,20 +117,27 @@ bool Frame::initFromGRO(const string &groname){
     return true;
 }
 
-void Frame::pbcAtom(int natoms){
-    if(natoms < 0) natoms = numAtoms_;
-    for(int i=0; i<natoms; i++){
+void Frame::pbcAtom(int natoms)
+{
+    if (natoms < 0)
+        natoms = numAtoms_;
+    for (int i = 0; i < natoms; i++)
+    {
         Atom &atom = atoms_[i];
 
         // For each coordinate wrap around into box
-        for(int j=0; j<3; j++){
-            while(atom.coords[j] < 0.) atom.coords[j] += box_[j][j];
-            while(atom.coords[j] > box_[j][j]) atom.coords[j] -= box_[j][j];
+        for (int j = 0; j < 3; j++)
+        {
+            while (atom.coords[j] < 0.)
+                atom.coords[j] += box_[j][j];
+            while (atom.coords[j] > box_[j][j])
+                atom.coords[j] -= box_[j][j];
         }
     }
 }
 
-void Frame::initFromITP(const string &itpname){
+void Frame::initFromITP(const string &itpname)
+{
     // Require that atoms have been created
     assert(atomHas_.created);
 
@@ -117,47 +146,54 @@ void Frame::initFromITP(const string &itpname){
     Parser itp_parser(itpname, FileFormat::GROMACS);
 
     // How many atoms are there?  Per residue?  In total?
-    if(residues_[0].num_atoms < 0){
-        while(itp_parser.getLineFromSection("atoms", substrs, 4)){
+    if (residues_[0].num_atoms < 0)
+    {
+        while (itp_parser.getLineFromSection("atoms", substrs, 4))
+        {
             // Loop through all atoms in residue and take the last number
-            if(substrs[3] == residues_[0].resname) residues_[0].num_atoms++;
+            if (substrs[3] == residues_[0].resname)
+                residues_[0].num_atoms++;
         }
     }
     residues_[0].calc_total();
 
-    for(int i = 0; i < residues_[0].num_atoms; i++){
+    for (int i = 0; i < residues_[0].num_atoms; i++)
+    {
         // Read data from topology file for each atom
         itp_parser.getLineFromSection("atoms", substrs, 5);
-        const string type = substrs[1];
-        const string name = substrs[4];
+        const string type  = substrs[1];
+        const string name  = substrs[4];
         atomHas_.atom_type = true;
         atomHas_.atom_name = true;
 
         double charge = 0.;
-        if(substrs.size() >= 7){
-            charge = atof(substrs[6].c_str());
+        if (substrs.size() >= 7)
+        {
+            charge          = atof(substrs[6].c_str());
             atomHas_.charge = true;
         }
 
         double mass = 1.;
-        if(substrs.size() >= 8){
-            mass = atof(substrs[7].c_str());
+        if (substrs.size() >= 8)
+        {
+            mass          = atof(substrs[7].c_str());
             atomHas_.mass = true;
         }
 
-        for(int j = 0; j < residues_[0].num_residues; j++){
-            const int num = i + j * residues_[0].num_atoms;
-            atoms_[num] = Atom();
+        for (int j = 0; j < residues_[0].num_residues; j++)
+        {
+            const int num         = i + j * residues_[0].num_atoms;
+            atoms_[num]           = Atom();
             atoms_[num].atom_type = type;
             atoms_[num].atom_name = name;
-            atoms_[num].charge = charge;
-            atoms_[num].mass = mass;
+            atoms_[num].charge    = charge;
+            atoms_[num].mass      = mass;
         }
     }
-
 }
 
-void Frame::initFromFLD(const std::string &fldname){
+void Frame::initFromFLD(const std::string &fldname)
+{
     // Require that atoms have been created and assigned names
     assert(atomHas_.created);
     assert(atomHas_.atom_type);
@@ -168,12 +204,14 @@ void Frame::initFromFLD(const std::string &fldname){
     map<string, double> c12;
 
     vector<string> tokens;
-    while(parser.getLineFromSection("atomtypes", tokens, 7)){
+    while (parser.getLineFromSection("atomtypes", tokens, 7))
+    {
         c06[tokens[0]] = stof(tokens[5]);
         c12[tokens[0]] = stof(tokens[6]);
     }
 
-    for(int i=0; i<residues_[0].total_atoms; i++){
+    for (int i = 0; i < residues_[0].total_atoms; i++)
+    {
         atoms_[i].c06 = c06.at(atoms_[i].atom_type);
         atoms_[i].c12 = c12.at(atoms_[i].atom_type);
     }
@@ -181,29 +219,33 @@ void Frame::initFromFLD(const std::string &fldname){
     atomHas_.lj = true;
 }
 
-bool Frame::readNext(){
+bool Frame::readNext()
+{
     return trjIn_->readFrame(*this) == 0;
 }
 
-void Frame::printAtoms(int natoms) const{
+void Frame::printAtoms(int natoms) const
+{
     assert(isSetup_);
-    if(natoms == -1) natoms = numAtoms_;
+    if (natoms == -1)
+        natoms = numAtoms_;
     printf("  Num Name    Mass  Charge    Posx    Posy    Posz\n");
-    for(int i=0; i<natoms; i++){
+    for (int i = 0; i < natoms; i++)
+    {
         const Atom &atom = atoms_[i];
-        printf("%5i%5s%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n",
-               i, atom.atom_name.c_str(),
-               atom.mass, atom.charge,
-               atom.coords[0], atom.coords[1], atom.coords[2],
-               atom.dipole[0], atom.dipole[1], atom.dipole[2], atom.dipole[3]);
+        printf("%5i%5s%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f%8.3f\n", i,
+               atom.atom_name.c_str(), atom.mass, atom.charge, atom.coords[0],
+               atom.coords[1], atom.coords[2], atom.dipole[0], atom.dipole[1],
+               atom.dipole[2], atom.dipole[3]);
     }
 }
 
-void Frame::printBox() const{
+void Frame::printBox() const
+{
     // Print box vectors - assume cubic
-    for(int i=0; i<3; i++){
+    for (int i = 0; i < 3; i++)
+    {
         printf("%8.4f", box_[i][i]);
     }
     printf("\n");
 }
-

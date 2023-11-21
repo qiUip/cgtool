@@ -7,28 +7,31 @@
 
 #include <vector>
 
-#include "residue.h"
 #include "frame.h"
 #include "histogram.h"
 #include "light_array.h"
+#include "residue.h"
 
-class RDF{
+class RDF
+{
 protected:
     const std::vector<Residue> &residues_;
-    double cutoff_ = 2.;
+    double cutoff_  = 2.;
     int resolution_ = 100;
 
     int grid_ = 200;
 
-    int frames_ = 0;
+    int frames_     = 0;
     double density_ = 0.;
 
     Histogram histogram_;
     LightArray<double> rdf_;
 
 public:
-    RDF(const std::vector<Residue> &residues, const double cutoff, const int resolution) :
-        residues_(residues), cutoff_(cutoff), resolution_(resolution){
+    RDF(const std::vector<Residue> &residues, const double cutoff,
+        const int resolution)
+        : residues_(residues), cutoff_(cutoff), resolution_(resolution)
+    {
         grid_ = static_cast<int>(cutoff_ * resolution_);
         histogram_.init(grid_);
         rdf_.alloc(grid_);
@@ -38,4 +41,4 @@ public:
     void normalize();
 };
 
-#endif //CGTOOL_RDF_H
+#endif // CGTOOL_RDF_H

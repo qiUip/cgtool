@@ -10,7 +10,8 @@
 #include "bondset.h"
 #include "rdf.h"
 
-class Cgtool : public Common{
+class Cgtool : public Common
+{
 protected:
     // Output file formats
     FileFormat outProgram_;
@@ -18,21 +19,24 @@ protected:
     /** \brief Types of the three bonded potentials */
     PotentialType potentialTypes_[3];
 
-    BondSet  *bondSet_ = nullptr;
-    RDF      *rdf_ = nullptr;
+    BondSet *bondSet_ = nullptr;
+    RDF *rdf_         = nullptr;
 
     TrjOutput *trjOutput_ = nullptr;
 
     double temperature_ = 310;
 
     // Protected functions
-    /** \brief Read config file and determine which functions should be performed */
+    /** \brief Read config file and determine which functions should be
+     * performed */
     void readConfig();
 
-    /** \brief Construct objects which are required to perform requested functions */
+    /** \brief Construct objects which are required to perform requested
+     * functions */
     void setupObjects();
 
-    /** \brief Function executed within the main loop - performs most significant work*/
+    /** \brief Function executed within the main loop - performs most
+     * significant work*/
     void mainLoop();
 
     /** \brief Perform final calculations and end program */
@@ -43,5 +47,4 @@ public:
     virtual ~Cgtool();
 };
 
-
-#endif //CGTOOL_CGTOOL_H
+#endif // CGTOOL_CGTOOL_H

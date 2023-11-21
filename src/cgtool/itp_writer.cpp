@@ -1,33 +1,38 @@
 #include "itp_writer.h"
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 #include <sysexits.h>
 
 #include "small_functions.h"
 
-using std::string;
-using std::fprintf;
 using std::cout;
 using std::endl;
+using std::fprintf;
+using std::string;
 using std::vector;
 
-ITPWriter::ITPWriter(const vector<Residue> *residues, const FileFormat file_format,
-                     const FieldFormat field_format, string itpname){
-    format_ = file_format;
+ITPWriter::ITPWriter(const vector<Residue> *residues,
+                     const FileFormat file_format,
+                     const FieldFormat field_format, string itpname)
+{
+    format_      = file_format;
     fieldFormat_ = field_format;
-    resName_ = (*residues)[0].resname;
+    resName_     = (*residues)[0].resname;
 
-    switch(format_){
+    switch (format_)
+    {
         case FileFormat::GROMACS:
-            if(itpname == "") itpname = resName_ + ".itp";
+            if (itpname == "")
+                itpname = resName_ + ".itp";
             comment_ = ';';
             break;
 
         case FileFormat::LAMMPS:
             // Considering just leaving filenames the same
-            if(itpname == "") itpname = "forcefield." + resName_;
+            if (itpname == "")
+                itpname = "forcefield." + resName_;
             comment_ = '#';
             break;
     }
@@ -35,22 +40,26 @@ ITPWriter::ITPWriter(const vector<Residue> *residues, const FileFormat file_form
     backup_old_file(name_.c_str());
 
     itp_ = std::fopen(name_.c_str(), "w");
-    if(itp_ == NULL){
+    if (itp_ == NULL)
+    {
         printf("Could not open itp file for writing\n");
         exit(EX_CANTCREAT);
     }
 
     // Set the comment marker for this format
     fprintf(itp_, "%c\n", comment_);
-    for(const string& line : header_) fprintf(itp_, "%c %s", comment_, line.c_str());
+    for (const string &line : header_)
+        fprintf(itp_, "%c %s", comment_, line.c_str());
     fprintf(itp_, "%c\n", comment_);
 
-    // Would like timestamp, but it conflicts with testing - can't diff a file with timestamp
-//    time_t now = time(0);
-//    char *dt = ctime(&now);
-//    fprintf(itp_, "; %s;\n", dt);
+    // Would like timestamp, but it conflicts with testing - can't diff a file
+    // with timestamp
+    //    time_t now = time(0);
+    //    char *dt = ctime(&now);
+    //    fprintf(itp_, "; %s;\n", dt);
 
-    switch(format_){
+    switch (format_)
+    {
         case FileFormat::GROMACS:
             newSection("moleculetype");
             fprintf(itp_, ";molecule name  nrexcl\n");
@@ -67,13 +76,17 @@ ITPWriter::ITPWriter(const vector<Residue> *residues, const FileFormat file_form
     }
 }
 
-ITPWriter::~ITPWriter(){
-    if(itp_ != NULL) std::fclose(itp_);
+ITPWriter::~ITPWriter()
+{
+    if (itp_ != NULL)
+        std::fclose(itp_);
 }
 
-void ITPWriter::newSection(const string &section_name) const{
+void ITPWriter::newSection(const string &section_name) const
+{
     section_ = section_name;
-    switch(format_){
+    switch (format_)
+    {
         case FileFormat::GROMACS:
             fprintf(itp_, "\n[ %s ]\n", section_.c_str());
             break;
@@ -83,30 +96,41 @@ void ITPWriter::newSection(const string &section_name) const{
     }
 }
 
-void ITPWriter::printAtoms(const CGMap &map) const{
-    switch(format_){
+void ITPWriter::printAtoms(const CGMap &map) const
+{
+    switch (format_)
+    {
         case FileFormat::GROMACS:
             newSection("atoms");
-            fprintf(itp_, ";  num   beadtype  resnr   resnm  bead  chrg#     charge    mass\n");
+            fprintf(itp_, ";  num   beadtype  resnr   resnm  bead  chrg#     "
+                          "charge    mass\n");
 
-            for(BeadMap bead : map.mapping_){
+            for (BeadMap bead : map.mapping_)
+            {
                 // MARTINI only has charge on 'Qx' beads
                 double charge = bead.charge;
-                if(fieldFormat_ == FieldFormat::MARTINI){
-                    if(bead.type[0] == 'Q'){
-                        // Convert to integer with rounding - Mac doesn't have round()
+                if (fieldFormat_ == FieldFormat::MARTINI)
+                {
+                    if (bead.type[0] == 'Q')
+                    {
+                        // Convert to integer with rounding - Mac doesn't have
+                        // round()
                         charge = floor(charge + copysign(0.5, charge));
-                    }else{
+                    }
+                    else
+                    {
                         charge = 0.;
                     }
                 }
 
-                fprintf(itp_, "%6i %10s %6i %6s %6s %6i %10.4f",
-                        bead.num+1, bead.type.c_str(), 1, resName_.c_str(),
-                        bead.name.c_str(), bead.num+1, charge);
+                fprintf(itp_, "%6i %10s %6i %6s %6s %6i %10.4f", bead.num + 1,
+                        bead.type.c_str(), 1, resName_.c_str(),
+                        bead.name.c_str(), bead.num + 1, charge);
 
-                // MARTINI doesn't include masses - all beads are assumed same mass
-                if(fieldFormat_ != FieldFormat::MARTINI) fprintf(itp_, " %10.4f", bead.mass);
+                // MARTINI doesn't include masses - all beads are assumed same
+                // mass
+                if (fieldFormat_ != FieldFormat::MARTINI)
+                    fprintf(itp_, " %10.4f", bead.mass);
                 fprintf(itp_, ";\n");
             }
             break;
@@ -114,74 +138,96 @@ void ITPWriter::printAtoms(const CGMap &map) const{
         case FileFormat::LAMMPS:
             fprintf(itp_, "\n#atom masses\n");
 
-            for(BeadMap bead : map.mapping_){
-                fprintf(itp_, "mass %4i %8.3f\n",
-                        bead.num+1, bead.mass);
+            for (BeadMap bead : map.mapping_)
+            {
+                fprintf(itp_, "mass %4i %8.3f\n", bead.num + 1, bead.mass);
             }
             break;
     }
 }
 
-void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const{
+void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
+{
     const double scale = 3.;
-    switch(format_){
+    switch (format_)
+    {
         case FileFormat::GROMACS:
             newSection("bonds");
-            fprintf(itp_, ";atm1  atm2  type  equilibrium  force const  unimodality\n");
-            for(const BondStruct &bond : bond_set.bonds_){
+            fprintf(
+                itp_,
+                ";atm1  atm2  type  equilibrium  force const  unimodality\n");
+            for (const BondStruct &bond : bond_set.bonds_)
+            {
                 double f_const = bond.forceConstant_;
-                if(round) f_const = scale * pow(10, floor(log10(f_const)));
+                if (round)
+                    f_const = scale * pow(10, floor(log10(f_const)));
                 fprintf(itp_, "%5i %5i %5i %12.5f %12.5f; %5.3f\n",
-                        bond.atomNums_[0]+1, bond.atomNums_[1]+1, 1,
+                        bond.atomNums_[0] + 1, bond.atomNums_[1] + 1, 1,
                         bond.avg_, f_const, bond.rsqr_);
             }
 
             newSection("angles");
-            fprintf(itp_, ";atm1  atm2  atm3  type  equilibrium  force const  unimodality\n");
-            for(const BondStruct &bond : bond_set.angles_){
+            fprintf(itp_, ";atm1  atm2  atm3  type  equilibrium  force const  "
+                          "unimodality\n");
+            for (const BondStruct &bond : bond_set.angles_)
+            {
                 double f_const = bond.forceConstant_;
-                if(round) f_const = scale * pow(10, floor(log10(f_const)));
+                if (round)
+                    f_const = scale * pow(10, floor(log10(f_const)));
                 fprintf(itp_, "%5i %5i %5i %5i %12.5f %12.5f; %5.3f\n",
-                        bond.atomNums_[0]+1, bond.atomNums_[1]+1,
-                        bond.atomNums_[2]+1, 2,
-                        bond.avg_, f_const, bond.rsqr_);
+                        bond.atomNums_[0] + 1, bond.atomNums_[1] + 1,
+                        bond.atomNums_[2] + 1, 2, bond.avg_, f_const,
+                        bond.rsqr_);
             }
 
             newSection("dihedrals");
-            fprintf(itp_, ";atm1  atm2  atm3  atm4  type  equilibrium  force const  mult  unimodality\n");
-            for(const BondStruct &bond : bond_set.dihedrals_){
+            fprintf(itp_, ";atm1  atm2  atm3  atm4  type  equilibrium  force "
+                          "const  mult  unimodality\n");
+            for (const BondStruct &bond : bond_set.dihedrals_)
+            {
                 double f_const = bond.forceConstant_;
-                if(round) f_const = scale * pow(10, floor(log10(f_const)));
+                if (round)
+                    f_const = scale * pow(10, floor(log10(f_const)));
                 fprintf(itp_, "%5i %5i %5i %5i %5i %12.5f %12.5f %5i; %5.3f\n",
-                        bond.atomNums_[0]+1, bond.atomNums_[1]+1,
-                        bond.atomNums_[2]+1, bond.atomNums_[3]+1,
+                        bond.atomNums_[0] + 1, bond.atomNums_[1] + 1,
+                        bond.atomNums_[2] + 1, bond.atomNums_[3] + 1,
                         // TODO support multiplicity
-                        1, wrapOneEighty(bond.avg_ + 180), f_const, 1, bond.rsqr_);
+                        1, wrapOneEighty(bond.avg_ + 180), f_const, 1,
+                        bond.rsqr_);
             }
             break;
 
         case FileFormat::LAMMPS:
             fprintf(itp_, "\n#bonds     bond    equil  f_const  unimodality\n");
             int i = 1;
-            for(const BondStruct &bond : bond_set.bonds_){
-                fprintf(itp_, "bond_coeff %4i %8.3f %8.3f  #  %8.3f\n",
-                        i, bond.avg_, bond.forceConstant_, bond.rsqr_);
+            for (const BondStruct &bond : bond_set.bonds_)
+            {
+                fprintf(itp_, "bond_coeff %4i %8.3f %8.3f  #  %8.3f\n", i,
+                        bond.avg_, bond.forceConstant_, bond.rsqr_);
                 i++;
             }
 
-            fprintf(itp_, "\n#angles     bond                    equil  f_const  unimodality\n");
+            fprintf(itp_, "\n#angles     bond                    equil  "
+                          "f_const  unimodality\n");
             i = 1;
-            for(const BondStruct &bond : bond_set.angles_){
-                fprintf(itp_, "angle_coeff %4i  cosine/squared %8.3f %8.3f  #  %8.3f\n",
-                        i, bond.avg_, bond.forceConstant_, bond.rsqr_);
+            for (const BondStruct &bond : bond_set.angles_)
+            {
+                fprintf(
+                    itp_,
+                    "angle_coeff %4i  cosine/squared %8.3f %8.3f  #  %8.3f\n",
+                    i, bond.avg_, bond.forceConstant_, bond.rsqr_);
                 i++;
             }
 
-            fprintf(itp_, "\n#dihedrals     bond                    equil  f_const  unimodality\n");
+            fprintf(itp_, "\n#dihedrals     bond                    equil  "
+                          "f_const  unimodality\n");
             i = 1;
-            for(const BondStruct &bond : bond_set.dihedrals_){
-                fprintf(itp_, "angle_coeff %4i  cosine/squared %8.3f %8.3f  #  %8.3f\n",
-                        i, bond.avg_, bond.forceConstant_, bond.rsqr_);
+            for (const BondStruct &bond : bond_set.dihedrals_)
+            {
+                fprintf(
+                    itp_,
+                    "angle_coeff %4i  cosine/squared %8.3f %8.3f  #  %8.3f\n",
+                    i, bond.avg_, bond.forceConstant_, bond.rsqr_);
                 i++;
             }
 
@@ -189,15 +235,19 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const{
     }
 }
 
-void ITPWriter::printAtomTypes(const CGMap &cgmap) const{
-    switch(format_){
+void ITPWriter::printAtomTypes(const CGMap &cgmap) const
+{
+    switch (format_)
+    {
         case FileFormat::GROMACS:
             newSection("atomtypes");
-            fprintf(itp_, ";name  at.num   mass      charge  ptype       c6           c12\n");
-            for(const BeadMap &bead : cgmap.mapping_){
+            fprintf(itp_, ";name  at.num   mass      charge  ptype       c6    "
+                          "       c12\n");
+            for (const BeadMap &bead : cgmap.mapping_)
+            {
                 fprintf(itp_, "%5s%5i%11.3f%11.3f%6s%14.10f%14.10f\n",
-                        bead.type.c_str(), 0, bead.mass, bead.charge,
-                        "A", bead.c06, bead.c12);
+                        bead.type.c_str(), 0, bead.mass, bead.charge, "A",
+                        bead.c06, bead.c12);
             }
             break;
         case FileFormat::LAMMPS:

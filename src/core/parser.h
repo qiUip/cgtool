@@ -8,9 +8,10 @@
 #include "file_io.h"
 
 /**
-* \brief Parses input files for comments, section headers and data lines
-*/
-class Parser{
+ * \brief Parses input files for comments, section headers and data lines
+ */
+class Parser
+{
 private:
     /** The file currently being read */
     std::ifstream file_;
@@ -28,11 +29,12 @@ private:
     FileFormat format_ = FileFormat::GROMACS;
 
     /**
-    * \brief Reads a line from file and splits it into tokens
-    *
-    * Will skip over empty lines and comments and read section headers transparently
-    * Parses the next data line and fills a vector<string> of tokens
-    */
+     * \brief Reads a line from file and splits it into tokens
+     *
+     * Will skip over empty lines and comments and read section headers
+     * transparently Parses the next data line and fills a vector<string> of
+     * tokens
+     */
     bool getLine(std::vector<std::string> &tokens);
 
     /** \brief Rewind to start of file */
@@ -40,30 +42,35 @@ private:
 
 public:
     /**
-    * \brief Constructor for a Parser which will open a file and prepare for reading
-    * \throws runtime_error if file cannot be opened
-    */
-    Parser(const std::string filename, const FileFormat format=FileFormat::GROMACS);
+     * \brief Constructor for a Parser which will open a file and prepare for
+     * reading \throws runtime_error if file cannot be opened
+     */
+    Parser(const std::string filename,
+           const FileFormat format = FileFormat::GROMACS);
 
     /** Destructor to close file */
     ~Parser();
 
     /** \brief Search through a config file for a particular section
-    * Returns false if section cannot be found
-    */
+     * Returns false if section cannot be found
+     */
     bool findSection(const std::string find);
 
-    /**\brief Search through config file for a particular section and pass back lines
-    * Once it reaches the end of the file, it rewinds to the beginning and returns
-    * Can specify the number of tokens expected, will return false if too few found */
-    bool getLineFromSection(const std::string find, std::vector<std::string> &tokens, const int len=1);
+    /**\brief Search through config file for a particular section and pass back
+     * lines Once it reaches the end of the file, it rewinds to the beginning
+     * and returns Can specify the number of tokens expected, will return false
+     * if too few found */
+    bool getLineFromSection(const std::string find,
+                            std::vector<std::string> &tokens,
+                            const int len = 1);
 
     bool getKeyFromSection(const std::string &section, const std::string &key,
                            std::string &value);
 
     int getIntKeyFromSection(const std::string &section, const std::string &key,
                              const int default_value);
-    double getDoubleKeyFromSection(const std::string &section, const std::string &key,
+    double getDoubleKeyFromSection(const std::string &section,
+                                   const std::string &key,
                                    const double default_value);
     std::string getStringKeyFromSection(const std::string &section,
                                         const std::string &key,
