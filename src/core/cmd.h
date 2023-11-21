@@ -6,9 +6,10 @@
 #include <boost/program_options.hpp>
 
 /**
-* \brief Object to handle input to programs from the command line.
-*/
-class CMD : public CMDAbstract{
+ * \brief Object to handle input to programs from the command line.
+ */
+class CMD : public CMDAbstract
+{
 protected:
     /** Store options from Boost program_options */
     boost::program_options::variables_map options_;
@@ -23,21 +24,21 @@ public:
     ~CMD(){};
 
     /** \brief Return the value of named filepath argument.
-    * If argument was not provided by the user the default value will be used.
-    * If there is no default value, print an error
-    */
+     * If argument was not provided by the user the default value will be used.
+     * If there is no default value, print an error
+     */
     std::string getStringArg(const std::string &arg) const;
 
     /** \brief Return the value of a named boolean argument.
-    * If argument was not provided by the user the default value will be used.
-    * If there is no default value, print an error
-    */
+     * If argument was not provided by the user the default value will be used.
+     * If there is no default value, print an error
+     */
     bool getBoolArg(const std::string &arg) const;
 
     /** \brief Return the value of a named integer argument.
-    * If argument was not provided by the user the default value will be used.
-    * If there is no default value, print an error
-    */
+     * If argument was not provided by the user the default value will be used.
+     * If there is no default value, print an error
+     */
     int getIntArg(const std::string &arg) const;
 };
 

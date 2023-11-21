@@ -8,7 +8,8 @@
 
 using std::vector;
 
-TEST(BondSetTest, FromFile){
+TEST(BondSetTest, FromFile)
+{
     vector<Residue> tmpres;
     PotentialType tmppots[3];
     BondSet bondset("../test_data/ALLA/cg.cfg", tmpres, tmppots, 310);
@@ -19,7 +20,8 @@ TEST(BondSetTest, FromFile){
     ASSERT_EQ(bondset.bonds_[5].atomNums_[1], 0);
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

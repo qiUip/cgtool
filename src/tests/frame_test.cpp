@@ -9,15 +9,18 @@ void test_1();
 void test_2();
 void test_3();
 
-int src_tests_frame_test(int argc, char* argv[]){
+int src_tests_frame_test(int argc, char *argv[])
+{
     int defaultchoice = 1;
-    int choice = defaultchoice;
+    int choice        = defaultchoice;
 
-    if(argc>1) {
+    if (argc > 1)
+    {
         choice = atoi(argv[1]);
     }
 
-    switch(choice){
+    switch (choice)
+    {
         case 1:
             test_1();
             break;
@@ -34,15 +37,14 @@ int src_tests_frame_test(int argc, char* argv[]){
     return 0;
 }
 
-void test_1(){
-
+void test_1()
+{
 }
 
-void test_2(){
-
+void test_2()
+{
 }
 
-void test_3(){
-
+void test_3()
+{
 }
-

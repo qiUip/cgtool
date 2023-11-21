@@ -10,43 +10,55 @@
 
 using std::string;
 
-XTCOutput::XTCOutput(const int natoms, const string &filename){
+XTCOutput::XTCOutput(const int natoms, const string &filename)
+{
     natoms_ = natoms;
-    x_ = new rvec[natoms_];
+    x_      = new rvec[natoms_];
     openFile(filename);
 }
 
-XTCOutput::~XTCOutput(){
+XTCOutput::~XTCOutput()
+{
     closeFile();
-    if(x_) delete[] x_;
+    if (x_)
+        delete[] x_;
 }
 
-int XTCOutput::openFile(const string &filename){
+int XTCOutput::openFile(const string &filename)
+{
     backup_old_file(filename);
     file_ = xdrfile_open(filename.c_str(), "w");
-    if(file_) return 0;
+    if (file_)
+        return 0;
     return 1;
 }
 
-int XTCOutput::closeFile(){
-    if(file_) xdrfile_close(file_);
-    if(!file_) return 0;
+int XTCOutput::closeFile()
+{
+    if (file_)
+        xdrfile_close(file_);
+    if (!file_)
+        return 0;
     return 1;
 }
 
-int XTCOutput::writeFrame(const Frame &frame){
-    for(int i=0; i<3; i++){
-        for(int j=0; j<3; j++){
+int XTCOutput::writeFrame(const Frame &frame)
+{
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
+        {
             box_[i][j] = frame.box_[i][j];
         }
     }
 
-    for(int i=0; i<natoms_; i++){
+    for (int i = 0; i < natoms_; i++)
+    {
         x_[i][0] = float(frame.atoms_[i].coords[0]);
         x_[i][1] = float(frame.atoms_[i].coords[1]);
         x_[i][2] = float(frame.atoms_[i].coords[2]);
     }
 
-    return exdrOK == write_xtc(file_, natoms_, frame.step_,
-                               frame.time_, box_, x_, 500.f);
+    return exdrOK ==
+           write_xtc(file_, natoms_, frame.step_, frame.time_, box_, x_, 500.f);
 }

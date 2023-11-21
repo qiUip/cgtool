@@ -7,7 +7,8 @@
 
 #include "trj_output.h"
 
-class GROOutput : public TrjOutput{
+class GROOutput : public TrjOutput
+{
 protected:
     /** \brief Output file handle. */
     FILE *file_ = nullptr;
@@ -16,6 +17,7 @@ protected:
     int openFile(const std::string &filename);
     /** \brief Close output file. */
     int closeFile();
+
 public:
     /** \brief Constructor.  Calls openFile() .*/
     GROOutput(const int natoms, const std::string &filename);
@@ -28,4 +30,4 @@ public:
     friend class Frame;
 };
 
-#endif //CGTOOL_GROOUTPUT_H
+#endif // CGTOOL_GROOUTPUT_H

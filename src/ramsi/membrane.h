@@ -5,17 +5,18 @@
 #ifndef CGTOOL_MEMBRANE_H
 #define CGTOOL_MEMBRANE_H
 
-#include <string>
-#include <vector>
-#include <set>
 #include <array>
 #include <map>
+#include <set>
+#include <string>
+#include <vector>
 
 #include "frame.h"
-#include "residue.h"
 #include "light_array.h"
+#include "residue.h"
 
-class Membrane{
+class Membrane
+{
 protected:
     /** Head group reference atoms in the upper layer */
     std::vector<int> upperHeads_;
@@ -69,31 +70,34 @@ protected:
     /** \brief Find closest head group to each grid cell */
     double closestLipid(const Frame &frame, const std::vector<int> &ref,
                         const std::map<int, double> &pairs,
-                        std::map<std::string, int> &resPPL, LightArray<int> &closest);
+                        std::map<std::string, int> &resPPL,
+                        LightArray<int> &closest);
 
     void prepCSVAvgThickness();
     void prepCSVAreaPerLipid();
 
 public:
-
     /** \brief Print header in CSV or not */
     const bool header_;
 
     /** \brief Destructor */
     ~Membrane();
 
-    /** \brief Construct Membrane with vector of Residues present in simulation */
+    /** \brief Construct Membrane with vector of Residues present in simulation
+     */
     Membrane(const std::vector<Residue> &residues, const Frame &frame,
-             const int resolution=100, const int blocks=4, const bool header=true);
+             const int resolution = 100, const int blocks = 4,
+             const bool header = true);
 
     /** \brief Sort head groups into upper and lower bilayer
      *  Divided into blocks to account for curvature. Size blocks * blocks */
-    void sortBilayer(const Frame &frame, const int blocks=4);
+    void sortBilayer(const Frame &frame, const int blocks = 4);
 
     /** \brief Calculate thickness of bilayer */
-    double thickness(const Frame &frame, const bool with_reset=false);
+    double thickness(const Frame &frame, const bool with_reset = false);
 
-    /** \brief Calculate curvature of membrane by 2nd order finite differences */
+    /** \brief Calculate curvature of membrane by 2nd order finite differences
+     */
     void curvature(const Frame &frame);
 
     /** \brief Print curvature grid to file */
@@ -103,7 +107,7 @@ public:
     double mean() const;
 
     /** \brief Normalize membrane thickness array in place */
-    void normalize(const int smooth_iter=1);
+    void normalize(const int smooth_iter = 1);
 
     /** \brief Print thickness array to CSV */
     void printCSV(const std::string &filename) const;
@@ -118,4 +122,4 @@ public:
     void reset();
 };
 
-#endif //CGTOOL_MEMBRANE_H
+#endif // CGTOOL_MEMBRANE_H

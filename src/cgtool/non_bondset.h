@@ -5,12 +5,10 @@
 #ifndef CGTOOL_NON_BONDSET_H
 #define CGTOOL_NON_BONDSET_H
 
-class NonBondSet{
+class NonBondSet
+{
 protected:
-
-
 public:
-
 };
 
-#endif //CGTOOL_NON_BONDSET_H
+#endif // CGTOOL_NON_BONDSET_H

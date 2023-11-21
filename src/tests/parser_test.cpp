@@ -2,17 +2,20 @@
 
 #include "gtest/gtest.h"
 
-TEST(ParserTest, FindSectionTrue){
+TEST(ParserTest, FindSectionTrue)
+{
     Parser parser("../test_data/modules/parser.cfg");
     ASSERT_TRUE(parser.findSection("yes"));
 }
 
-TEST(ParserTest, FindSectionFalse){
+TEST(ParserTest, FindSectionFalse)
+{
     Parser parser("../test_data/modules/parser.cfg");
     ASSERT_FALSE(parser.findSection("no"));
 }
 
-TEST(ParserTest, GetLineFromSectionTrue){
+TEST(ParserTest, GetLineFromSectionTrue)
+{
     // Indirectly tests Parser::getLine() by checking tokens
     Parser parser("../test_data/modules/parser.cfg");
     std::vector<std::string> tokens;
@@ -25,13 +28,15 @@ TEST(ParserTest, GetLineFromSectionTrue){
     ASSERT_EQ(tokens[3], "test");
 }
 
-TEST(ParserTest, GetLineFromSectionFalse){
+TEST(ParserTest, GetLineFromSectionFalse)
+{
     Parser parser("../test_data/modules/parser.cfg");
     std::vector<std::string> tokens;
     ASSERT_FALSE(parser.getLineFromSection("stillno", tokens));
 }
 
-TEST(ParserTest, Rewind){
+TEST(ParserTest, Rewind)
+{
     Parser parser("../test_data/modules/parser.cfg");
     std::vector<std::string> tokens;
     // Look for something that isn't there, rewind needs to work to find "test"
@@ -40,7 +45,8 @@ TEST(ParserTest, Rewind){
     ASSERT_EQ(tokens[0], "This");
 }
 
-TEST(ParserTest, GetKeyTrue){
+TEST(ParserTest, GetKeyTrue)
+{
     Parser parser("../test_data/modules/parser.cfg");
     std::vector<std::string> tokens;
     std::string value;
@@ -48,14 +54,16 @@ TEST(ParserTest, GetKeyTrue){
     ASSERT_EQ(value, "value");
 }
 
-TEST(ParserTest, GetKeyFalse){
+TEST(ParserTest, GetKeyFalse)
+{
     Parser parser("../test_data/modules/parser.cfg");
     std::vector<std::string> tokens;
     std::string value;
     ASSERT_FALSE(parser.getKeyFromSection("here", "nokey", value));
 }
 
-int main(int argc, char **argv){
+int main(int argc, char **argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

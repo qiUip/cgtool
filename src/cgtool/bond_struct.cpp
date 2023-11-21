@@ -1,17 +1,19 @@
 #include "bond_struct.h"
 
-#include <stdexcept>
 #include <array>
+#include <stdexcept>
 
 #include "small_functions.h"
 
 using std::array;
 
-BondStruct::BondStruct(const BondType type) : type_(type) {
+BondStruct::BondStruct(const BondType type) : type_(type)
+{
     atomNums_.resize(static_cast<int>(type_));
 }
 
-double BondStruct::bondLength(const Frame &frame, const int offset) const{
+double BondStruct::bondLength(const Frame &frame, const int offset) const
+{
     const int a = atomNums_[0] + offset;
     const int b = atomNums_[1] + offset;
 
@@ -21,7 +23,8 @@ double BondStruct::bondLength(const Frame &frame, const int offset) const{
     return abs(vec);
 }
 
-double BondStruct::bondAngle(const Frame &frame, const int offset) const{
+double BondStruct::bondAngle(const Frame &frame, const int offset) const
+{
     const int a = atomNums_[0] + offset;
     const int b = atomNums_[1] + offset;
     const int c = atomNums_[2] + offset;
@@ -34,7 +37,8 @@ double BondStruct::bondAngle(const Frame &frame, const int offset) const{
     return (M_PI - angle(vec1, vec2)) * 180. / M_PI;
 }
 
-double BondStruct::bondDihedral(const Frame &frame, const int offset) const{
+double BondStruct::bondDihedral(const Frame &frame, const int offset) const
+{
     const int a = atomNums_[0] + offset;
     const int b = atomNums_[1] + offset;
     const int c = atomNums_[2] + offset;
@@ -52,7 +56,7 @@ double BondStruct::bondDihedral(const Frame &frame, const int offset) const{
     cross(vec2, vec3, crossb);
     cross(crossa, crossb, crossc);
 
-    double ang = angle(crossa, crossb) * 180. / M_PI;
+    double ang       = angle(crossa, crossb) * 180. / M_PI;
     const double dir = dot(vec2, crossc);
     return dir < 0 ? ang : -ang;
 }

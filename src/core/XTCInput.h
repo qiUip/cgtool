@@ -8,7 +8,8 @@
 #include "TrjInput.h"
 #include "xdrfile.h"
 
-class XTCInput : public TrjInput{
+class XTCInput : public TrjInput
+{
 protected:
     /** \brief Stores atoms from XTC. */
     rvec *x_ = nullptr;
@@ -27,6 +28,7 @@ protected:
     int openFile(const std::string &filename);
     /** \brief Close input file. */
     int closeFile();
+
 public:
     /** \brief Constructor.  Calls openFile(). */
     XTCInput(const std::string &filename);
@@ -39,5 +41,4 @@ public:
     friend class Frame;
 };
 
-
-#endif //CGTOOL_XTCINPUT_H
+#endif // CGTOOL_XTCINPUT_H

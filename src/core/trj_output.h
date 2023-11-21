@@ -9,7 +9,8 @@
 
 #include "frame.h"
 
-class TrjOutput{
+class TrjOutput
+{
 protected:
     /** \brief Number of atoms to be written to output. */
     int natoms_;
@@ -29,5 +30,4 @@ public:
     friend class Frame;
 };
 
-
-#endif //CGTOOL_TRJOUTPUT_H
+#endif // CGTOOL_TRJOUTPUT_H
