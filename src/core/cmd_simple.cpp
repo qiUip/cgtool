@@ -1,17 +1,17 @@
 #include "cmd_simple.h"
 
 #include <iostream>
+#include <vector>
 
 #include <sysexits.h>
-
 #include <boost/algorithm/string.hpp>
 
 using std::string;
 using std::cout;
 using std::endl;
 using std::vector;
-using boost::algorithm::trim;
 using std::stoi;
+using boost::algorithm::trim;
 
 CMDSimple::CMDSimple(const string &help_header, const string &help_string,
          const string &compile_info, const int argc, const char *argv[]){

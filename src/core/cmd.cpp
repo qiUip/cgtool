@@ -1,17 +1,17 @@
 #include "cmd.h"
 
 #include <iostream>
+#include <vector>
 
 #include <sysexits.h>
-
 #include <boost/algorithm/string.hpp>
 
 using std::string;
 using std::cout;
 using std::endl;
 using std::vector;
-using boost::algorithm::trim;
 using std::stoi;
+using boost::algorithm::trim;
 
 namespace po = boost::program_options;
 
