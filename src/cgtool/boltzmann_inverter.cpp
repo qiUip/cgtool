@@ -88,18 +88,19 @@ double BoltzmannInverter::gaussianRSquared()
     y_bar /= bins_;
     integral_ = n_ / gaussian_.sum();
 
-    double ss_res = 0., ss_reg = 0., ss_tot = 0.;
-    double sse = 0.;
+    double ss_res = 0., ss_tot = 0.;
+    // double ss_reg = 0.;
+    // double sse = 0.;
     // Second pass to calculate R^2
     for (int i = 0; i < bins_; i++)
     {
         int actual = histogram_.at(i);
         gaussian_(i) *= integral_;
         const double gau = gaussian_.at(i);
-        ss_reg += (gau - y_bar) * (gau - y_bar);
+        // ss_reg += (gau - y_bar) * (gau - y_bar);
         ss_res += (gau - actual) * (gau - actual);
         ss_tot += (actual - y_bar) * (actual - y_bar);
-        sse += (actual - gau) * (actual - gau);
+        // sse += (actual - gau) * (actual - gau);
     }
     const double r_sqr = 1 - ss_res / ss_tot;
     return r_sqr;
@@ -117,14 +118,14 @@ double BoltzmannInverter::statisticalMoments(const vector<double> &vec)
     max_  = mean_;
     min_  = mean_;
 
-    double ep = 0.;
+    // double ep = 0.;
     var_      = 0.;
     adev_     = 0.;
     // Calculate deviations with second pass
     for (const double val : vec)
     {
         const double dev = val - mean_;
-        ep += dev;
+        // ep += dev;
         adev_ += fabs(dev);
         var_ += dev * dev;
         min_ = std::min(min_, val);

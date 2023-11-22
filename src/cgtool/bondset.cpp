@@ -20,7 +20,7 @@ using std::vector;
 
 BondSet::BondSet(const string &cfgname, const vector<Residue> &residues,
                  const PotentialType potentials[3], const double temp)
-    : residues_(residues), temp_(temp)
+    : temp_(temp), residues_(residues)
 {
     fromFile(cfgname);
 }
