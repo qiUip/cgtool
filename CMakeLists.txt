@@ -33,22 +33,24 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -ffast-math -march=native")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -march=native")
 
+
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING
-        "Defaults to Release build" FORCE)
+  set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build, options are: Release Debug ." FORCE)
 endif()
+# Toggleable build type
+set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Release;Debug")
 
 if(NOT CMAKE_CXX_FLAGS_Release)
     set(CMAKE_CXX_FLAGS_Release "-O3")
 endif()
 if(NOT CMAKE_CXX_FLAGS_Debug)
-    set(CMAKE_CXX_FLAGS_Debug "-g")
+    set(CMAKE_CXX_FLAGS_Debug "-g -O0")
 endif()
 
 if(${CMAKE_BUILD_TYPE} MATCHES "Release")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_Release}")
 elseif(CMAKE_BUILD_TYPE MATCHES "Debug")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_Release}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CMAKE_CXX_FLAGS_Debug}")
 endif()
 
 # Should we ignore warnings - default ignore a few - only on gcc

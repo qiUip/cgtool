@@ -131,11 +131,11 @@ void BondSet::BoltzmannInversion()
         return;
     }
     BoltzmannInverter bi(temp_);
-    for (BondStruct &bond : bonds_)
+    for (auto &bond : bonds_)
         bi.calculate(bond);
-    for (BondStruct &bond : angles_)
+    for (auto &bond : angles_)
         bi.calculate(bond);
-    for (BondStruct &bond : dihedrals_)
+    for (auto &bond : dihedrals_)
         bi.calculate(bond);
 }
 
