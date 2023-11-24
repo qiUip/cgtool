@@ -105,7 +105,7 @@ void ITPWriter::printAtoms(const CGMap &map) const
             fprintf(itp_, ";  num   beadtype  resnr   resnm  bead  chrg#     "
                           "charge    mass\n");
 
-            for (BeadMap bead : map.mapping_)
+            for (auto bead : map.getMapping())
             {
                 // MARTINI only has charge on 'Qx' beads
                 double charge = bead.charge;
@@ -138,7 +138,7 @@ void ITPWriter::printAtoms(const CGMap &map) const
         case FileFormat::LAMMPS:
             fprintf(itp_, "\n#atom masses\n");
 
-            for (BeadMap bead : map.mapping_)
+            for (auto bead : map.getMapping())
             {
                 fprintf(itp_, "mass %4i %8.3f\n", bead.num + 1, bead.mass);
             }
@@ -158,12 +158,12 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
                 ";atm1  atm2  type  equilibrium  force const  unimodality\n");
             for (const BondStruct &bond : bond_set.bonds_)
             {
-                double f_const = bond.forceConstant_;
+                double f_const = bond.getForceConstant();
                 if (round)
                     f_const = scale * pow(10, floor(log10(f_const)));
                 fprintf(itp_, "%5i %5i %5i %12.5f %12.5f; %5.3f\n",
-                        bond.atomNums_[0] + 1, bond.atomNums_[1] + 1, 1,
-                        bond.avg_, f_const, bond.rsqr_);
+                        bond.getAtomNum(0) + 1, bond.getAtomNum(1) + 1, 1,
+                        bond.getAvg(), f_const, bond.getRsqr());
             }
 
             newSection("angles");
@@ -171,13 +171,13 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
                           "unimodality\n");
             for (const BondStruct &bond : bond_set.angles_)
             {
-                double f_const = bond.forceConstant_;
+                double f_const = bond.getForceConstant();
                 if (round)
                     f_const = scale * pow(10, floor(log10(f_const)));
                 fprintf(itp_, "%5i %5i %5i %5i %12.5f %12.5f; %5.3f\n",
-                        bond.atomNums_[0] + 1, bond.atomNums_[1] + 1,
-                        bond.atomNums_[2] + 1, 2, bond.avg_, f_const,
-                        bond.rsqr_);
+                        bond.getAtomNum(0) + 1, bond.getAtomNum(1) + 1,
+                        bond.getAtomNum(2) + 1, 2, bond.getAvg(), f_const,
+                        bond.getRsqr());
             }
 
             newSection("dihedrals");
@@ -185,15 +185,15 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
                           "const  mult  unimodality\n");
             for (const BondStruct &bond : bond_set.dihedrals_)
             {
-                double f_const = bond.forceConstant_;
+                double f_const = bond.getForceConstant();
                 if (round)
                     f_const = scale * pow(10, floor(log10(f_const)));
                 fprintf(itp_, "%5i %5i %5i %5i %5i %12.5f %12.5f %5i; %5.3f\n",
-                        bond.atomNums_[0] + 1, bond.atomNums_[1] + 1,
-                        bond.atomNums_[2] + 1, bond.atomNums_[3] + 1,
+                        bond.getAtomNum(0) + 1, bond.getAtomNum(1) + 1,
+                        bond.getAtomNum(2) + 1, bond.getAtomNum(3) + 1,
                         // TODO support multiplicity
-                        1, wrapOneEighty(bond.avg_ + 180), f_const, 1,
-                        bond.rsqr_);
+                        1, wrapOneEighty(bond.getAvg() + 180), f_const, 1,
+                        bond.getRsqr());
             }
             break;
 
@@ -203,7 +203,7 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
             for (const BondStruct &bond : bond_set.bonds_)
             {
                 fprintf(itp_, "bond_coeff %4i %8.3f %8.3f  #  %8.3f\n", i,
-                        bond.avg_, bond.forceConstant_, bond.rsqr_);
+                        bond.getAvg(), bond.getForceConstant(), bond.getRsqr());
                 i++;
             }
 
@@ -215,7 +215,7 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
                 fprintf(
                     itp_,
                     "angle_coeff %4i  cosine/squared %8.3f %8.3f  #  %8.3f\n",
-                    i, bond.avg_, bond.forceConstant_, bond.rsqr_);
+                    i, bond.getAvg(), bond.getForceConstant(), bond.getRsqr());
                 i++;
             }
 
@@ -227,7 +227,7 @@ void ITPWriter::printBonds(const BondSet &bond_set, const bool round) const
                 fprintf(
                     itp_,
                     "angle_coeff %4i  cosine/squared %8.3f %8.3f  #  %8.3f\n",
-                    i, bond.avg_, bond.forceConstant_, bond.rsqr_);
+                    i, bond.getAvg(), bond.getForceConstant(), bond.getRsqr());
                 i++;
             }
 
@@ -243,7 +243,7 @@ void ITPWriter::printAtomTypes(const CGMap &cgmap) const
             newSection("atomtypes");
             fprintf(itp_, ";name  at.num   mass      charge  ptype       c6    "
                           "       c12\n");
-            for (const BeadMap &bead : cgmap.mapping_)
+            for (auto &bead : cgmap.getMapping())
             {
                 fprintf(itp_, "%5s%5i%11.3f%11.3f%6s%14.10f%14.10f\n",
                         bead.type.c_str(), 0, bead.mass, bead.charge, "A",

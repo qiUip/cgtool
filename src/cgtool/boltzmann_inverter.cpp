@@ -20,13 +20,13 @@ void BoltzmannInverter::calculate(BondStruct &bond)
     histogram_.zero();
     gaussian_.zero();
     harmonic_.zero();
-    n_ = bond.values_.size();
-    statisticalMoments(bond.values_);
-    bond.avg_ = mean_;
-    binHistogram(bond.values_);
-    bond.rsqr_          = gaussianRSquared();
-    type_               = bond.type_;
-    bond.forceConstant_ = invertGaussianSimple();
+    n_ = bond.getValues().size();
+    statisticalMoments(bond.getValues());
+    bond.setAvg(mean_);
+    binHistogram(bond.getValues());
+    bond.setRsqr(gaussianRSquared());
+    type_ = bond.getType();
+    bond.setForceConstant(invertGaussianSimple());
 }
 
 double BoltzmannInverter::invertGaussianSimple()
@@ -119,8 +119,8 @@ double BoltzmannInverter::statisticalMoments(const vector<double> &vec)
     min_  = mean_;
 
     // double ep = 0.;
-    var_      = 0.;
-    adev_     = 0.;
+    var_  = 0.;
+    adev_ = 0.;
     // Calculate deviations with second pass
     for (const double val : vec)
     {

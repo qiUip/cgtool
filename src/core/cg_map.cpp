@@ -159,7 +159,7 @@ void CGMap::initFrame(const Frame &aa_frame, Frame &cg_frame)
 
     cg_frame.numAtoms_ = i * aaRes_[0].num_residues;
 
-    cg_frame.isSetup_ = true;
+    cg_frame.setIsSetup(true);
     apply(aa_frame, cg_frame);
 
     cg_frame.atomHas_.atom_type = true;
@@ -188,7 +188,7 @@ double CGMap::calcLJ(const vector<int> &ljs)
 bool CGMap::apply(const Frame &aa_frame, Frame &cg_frame)
 {
     bool status = true;
-    if (!cg_frame.isSetup_)
+    if (!cg_frame.getIsSetup())
         throw std::logic_error("CG frame isn't setup");
     cg_frame.num_  = aa_frame.num_;
     cg_frame.time_ = aa_frame.time_;

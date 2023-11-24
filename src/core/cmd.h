@@ -10,7 +10,7 @@
  */
 class CMD : public CMDAbstract
 {
-protected:
+private:
     /** Store options from Boost program_options */
     boost::program_options::variables_map options_;
     boost::program_options::options_description desc_;

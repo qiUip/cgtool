@@ -10,7 +10,7 @@
  */
 class CMDSimple : public CMDAbstract
 {
-protected:
+private:
     /** Store options */
     std::map<std::string, std::string> options_;
     std::map<std::string, ArgType> type_;

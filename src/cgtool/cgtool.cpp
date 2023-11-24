@@ -202,7 +202,7 @@ void Cgtool::postProcess()
 {
     if (settings_["bonds"]["on"])
     {
-        bondSet_->BoltzmannInversion();
+        bondSet_->boltzmannInversion();
 
         printf("Printing results to ITP\n");
         ITPWriter itp(&residues_, outProgram_, outField_);
@@ -228,7 +228,7 @@ void Cgtool::postProcess()
         // Print something so to check results by eye
         for (int j = 0; j < 6 && j < bondSet_->bonds_.size(); j++)
         {
-            printf("%8.4f", bondSet_->bonds_[j].avg_);
+            printf("%8.4f", bondSet_->bonds_[j].getAvg());
         }
         if (bondSet_->bonds_.size() > 6)
             printf("  ...");

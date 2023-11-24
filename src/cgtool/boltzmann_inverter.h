@@ -12,7 +12,7 @@
  */
 class BoltzmannInverter
 {
-protected:
+private:
     const double temp_;
     const int bins_;
 
