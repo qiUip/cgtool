@@ -227,9 +227,11 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
 
     double sum = 0;
     int n_vals = 0;
+    //make a copy of frame.boxDiag_ to avoid having to share the whole class object between threads.
+    std::array<double, 3> boxDiag = frame.boxDiag_;
 
 #pragma omp parallel for default(none)                                         \
-    shared(frame, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,      \
+    shared(boxDiag, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,      \
                resPPL, box_diag2, ref_len, prot_len)                           \
     reduction(+ : sum, n_vals)
     for (int i = 0; i < grid_; i++)
@@ -247,7 +249,7 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
             for (int k = 0; k < ref_len; k++)
             {
                 const double dist2 =
-                    distSqrPlane(grid_coords, ref_cache[k], frame.boxDiag_);
+                    distSqrPlane(grid_coords, ref_cache[k], boxDiag);
                 if (dist2 < min_dist2)
                 {
                     closest_int = k;
@@ -261,7 +263,7 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
                 for (int k = 0; k < prot_len; k++)
                 {
                     const double dist2 = distSqrPlane(
-                        grid_coords, prot_cache[k], frame.boxDiag_);
+                        grid_coords, prot_cache[k], boxDiag);
                     if (dist2 < min_dist2)
                     {
                         is_protein = true;
