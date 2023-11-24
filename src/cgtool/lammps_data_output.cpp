@@ -1,13 +1,11 @@
 //
 // Created by james on 27/08/15.
 //
-
-#include "LammpsDataOutput.h"
+#include "lammps_data_output.h"
+#include "small_functions.h"
 
 #include <cstdio>
 #include <stdexcept>
-
-#include "small_functions.h"
 
 using std::string;
 

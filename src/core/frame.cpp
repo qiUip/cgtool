@@ -5,8 +5,8 @@
 #include <assert.h>
 #include <sysexits.h>
 
-#include "GROInput.h"
-#include "XTCInput.h"
+#include "gro_input.h"
+#include "xtc_input.h"
 #include "parser.h"
 #include "small_functions.h"
 #include "trj_output.h"

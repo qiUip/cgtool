@@ -18,7 +18,7 @@ using std::vector;
  */
 class BondSet
 {
-protected:
+private:
     /** How many frames did we successfully measure */
     int numMeasures_ = 0;
     /** Temperature of simulation - for Boltzmann Inversion */

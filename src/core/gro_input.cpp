@@ -2,7 +2,7 @@
 // Created by james on 25/08/15.
 //
 
-#include "GROInput.h"
+#include "gro_input.h"
 
 #include <sstream>
 #include <sysexits.h>

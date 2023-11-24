@@ -10,7 +10,7 @@
 
 class XTCOutput : public TrjOutput
 {
-protected:
+private:
     /** \brief Stores atoms copied from Frame. */
     rvec *x_ = nullptr;
     /** \brief Stores box vectors copied from Frame. */

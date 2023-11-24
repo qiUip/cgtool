@@ -15,7 +15,7 @@
 
 template <typename T> class LightArray
 {
-protected:
+private:
     std::valarray<T> array_;
     std::array<int, 2> size_ = {{0, 0}};
     const bool safe_;

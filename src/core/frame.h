@@ -94,6 +94,8 @@ private:
     /** Has the Frame been properly setup yet? */
     bool isSetup_ = false;
 
+    std::vector<Residue> &residues_;
+
 public:
     /** Vector of Atoms; Each Atom contains position and type data */
     std::vector<Atom> atoms_;
@@ -110,7 +112,6 @@ public:
     std::array<double, 3> boxDiag_;
     /** Which data have been loaded into atoms? */
     AtomsHave atomHas_;
-    std::vector<Residue> &residues_;
 
     /** \brief Create Frame passing config files.
      * Replaces calls to the function Frame::setupFrame() */
@@ -174,6 +175,11 @@ public:
     void setIsSetup(bool isSetup)
     {
         isSetup_ = isSetup;
+    }
+
+    std::vector<Residue> &getResidues() const
+    {
+        return residues_;
     }
 };
 

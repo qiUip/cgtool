@@ -17,7 +17,7 @@
 
 class Membrane
 {
-protected:
+private:
     /** Head group reference atoms in the upper layer */
     std::vector<int> upperHeads_;
     /** Head group reference atoms in the lower layer */
@@ -54,6 +54,8 @@ protected:
     /** Total number of frames processed - for averaging */
     int numFrames_ = 0;
 
+    /** \brief Print header in CSV or not */
+    const bool header_;
     /** \brief File for printing area per lipid */
     FILE *aplFile_ = nullptr;
     FILE *avgFile_ = nullptr;
@@ -77,9 +79,6 @@ protected:
     void prepCSVAreaPerLipid();
 
 public:
-    /** \brief Print header in CSV or not */
-    const bool header_;
-
     /** \brief Destructor */
     ~Membrane();
 

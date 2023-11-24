@@ -16,8 +16,16 @@ execute_process(
 string(REGEX MATCH "v([0-9]+)\\.([0-9]+)(\\.([0-9]+))?((pre)?([0-9]+))?" VERSION_MATCHES "${GIT_LATEST_TAG}")
 
 # Set version
-set(VERSION_MAJOR ${CMAKE_MATCH_1})
-set(VERSION_MINOR ${CMAKE_MATCH_2})
+if (CMAKE_MATCH_1)
+  set(VERSION_MAJOR ${CMAKE_MATCH_1})
+else()
+  set(VERSION_MAJOR 0)
+endif()
+if (CMAKE_MATCH_2)
+  set(VERSION_MINOR ${CMAKE_MATCH_2})
+else()
+  set(VERSION_MINOR 0)
+endif()
 if (CMAKE_MATCH_4)
   set(VERSION_PATCH ${CMAKE_MATCH_4})
 else()
@@ -28,7 +36,7 @@ MESSAGE("CMAKE ${CMAKE_VERSION}")
 MESSAGE("CXX   ${CMAKE_SYSTEM_NAME} ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 MESSAGE("C     ${CMAKE_SYSTEM_NAME} ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
 
-set(CMAKE_CXX_STANDARD 11) # or 14, 17, etc.
+set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -ffast-math -march=native")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -march=native")
@@ -54,7 +62,7 @@ elseif(CMAKE_BUILD_TYPE MATCHES "Debug")
 endif()
 
 # Should we ignore warnings - default ignore a few - only on gcc
-option(INGORE_SOME_WARNINGS "Don't ignore warnings" ON)
+option(IGNORE_SOME_WARNINGS "Don't ignore warnings" ON)
 set(IGNORED_WARNINGS " -Wno-sign-compare -Wno-unused-variable -Wno-comment -Wno-unused-but-set-variable")
 set(IGNORED_WARNINGS_ALWAYS " -Wno-sign-compare -Wno-reorder")
 
@@ -71,11 +79,10 @@ elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Linux")
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fopenmp")
         if(IGNORE_SOME_WARNINGS)
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${IGNORED_WARNINGS}")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNORED_WARNINGS}")
-        else()
-            set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${IGNORED_WARNINGS_ALWAYS}")
+            MESSAGE("IGNORED")
             set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${IGNORED_WARNINGS_ALWAYS}")
+            MESSAGE("ALWAYS")
         endif()
 
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
@@ -177,8 +184,10 @@ set(CGTOOLCORE_FILES
     "src/core/parser.cpp"
     "src/core/residue.cpp"
     "src/core/small_functions.cpp"
-    "src/core/GROInput.cpp"
-    "src/core/XTCInput.cpp"
+    "src/core/gro_input.cpp"
+    "src/core/gro_output.cpp"
+    "src/core/xtc_input.cpp"
+    "src/core/xtc_output.cpp"
     ${CMD_SRC})
 
 set(CGTOOL_FILES
@@ -188,12 +197,9 @@ set(CGTOOL_FILES
     "src/cgtool/bondset.cpp"
     "src/cgtool/histogram.cpp"
     "src/cgtool/itp_writer.cpp"
-    "src/cgtool/non_bondset.cpp"
-    "src/cgtool/GROOutput.cpp"
-    "src/cgtool/LammpsDataOutput.cpp"
-    "src/cgtool/LammpsTrjOutput.cpp"
-    "src/cgtool/XTCOutput.cpp"
-    "src/cgtool/rdf.cpp")
+    "src/cgtool/rdf.cpp"
+    "src/cgtool/lammps_data_output.cpp"
+    "src/cgtool/lammps_trj_output.cpp")
 
 set(RAMSI_FILES
     "src/ramsi/ramsi.cpp"

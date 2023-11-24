@@ -12,7 +12,7 @@
 
 class Cgtool : public Common
 {
-protected:
+private:
     // Output file formats
     FileFormat outProgram_;
     FieldFormat outField_;

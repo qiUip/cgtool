@@ -10,11 +10,11 @@
 
 class Ramsi : public Common
 {
-protected:
+private:
     Membrane *membrane_ = nullptr;
     std::vector<double> thickness_;
 
-    // Protected functions
+    // Private functions
     /** \brief Read config file and determine which functions should be
      * performed */
     void readConfig();

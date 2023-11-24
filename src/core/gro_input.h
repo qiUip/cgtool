@@ -5,7 +5,7 @@
 #ifndef CGTOOL_GROINPUT_H
 #define CGTOOL_GROINPUT_H
 
-#include "TrjInput.h"
+#include "trj_input.h"
 
 #include <fstream>
 #include <set>

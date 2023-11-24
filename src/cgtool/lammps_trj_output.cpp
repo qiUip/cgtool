@@ -2,12 +2,11 @@
 // Created by james on 27/08/15.
 //
 
-#include "LammpsTrjOutput.h"
+#include "lammps_trj_output.h"
+#include "small_functions.h"
 
 #include <cstdio>
 #include <stdexcept>
-
-#include "small_functions.h"
 
 using std::string;
 

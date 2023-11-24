@@ -60,10 +60,10 @@ CMD::CMD(const string &help_header, const string &help_string,
     {
         po::store(po::parse_command_line(argc, argv, desc_), options_);
     }
-    catch (po::error e)
+    catch (po::error const &e)
     {
-        cout << "Unrecognised command line argument\n" << endl;
-        cout << "Arguments:" << endl;
+        cout << "Unrecognised command line argument\n\n";
+        cout << "Arguments:\n";
         cout << desc_ << endl;
         exit(EX_USAGE);
     }
@@ -71,8 +71,8 @@ CMD::CMD(const string &help_header, const string &help_string,
     po::notify(options_);
     if (options_.count("help") || argc == 1)
     {
-        cout << help_header << endl;
-        cout << "Arguments:" << endl;
+        cout << help_header << "\n";
+        cout << "Arguments:\n";
         cout << desc_ << endl;
         exit(EX_OK);
     }
