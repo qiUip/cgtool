@@ -235,16 +235,14 @@ install(TARGETS cgtool RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 # Testing
 # Set the output directory for tests
 set(TEST_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/Testing)
-
-# Check if the tests directory exists, and create it if not
 if(NOT EXISTS ${TEST_OUTPUT_DIRECTORY})
     file(MAKE_DIRECTORY ${TEST_OUTPUT_DIRECTORY})
     message(STATUS "Created tests directory: ${TEST_OUTPUT_DIRECTORY}")
-endif()# Set the output directory for test executables
+endif()
 set(TEST_BINARY_DIRECTORY ${TEST_OUTPUT_DIRECTORY}/bin)
-#
+
 add_subdirectory(ThirdParty/gtest-1.7.0 EXCLUDE_FROM_ALL)
-include_directories(ThirdParty/gtest-1.7.0/include ThirdParty/gtest-1.7.0/include)
+include_directories(ThirdParty/gtest-1.7.0/include)
 
 # Test parser
 add_executable(gtest_parser EXCLUDE_FROM_ALL src/tests/parser_test.cpp)
