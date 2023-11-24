@@ -50,7 +50,7 @@ enum class MapType
  */
 class CGMap
 {
-protected:
+private:
     /** \brief What type of mapping are we going to apply?  CM, GC, or atom
      * centred Default is geometric centre of component atoms. */
     MapType mapType_ = MapType::GC;
@@ -61,12 +61,13 @@ protected:
     /** \brief Correct LJ parameters for CG */
     double calcLJ(const std::vector<int> &ljs);
 
-public:
     /** Number of beads defined */
     int numBeads_;
+
     /** Vector of BeadMap; holds the mappings for every bead */
     std::vector<BeadMap> mapping_;
 
+public:
     /**
      * \brief Constructor to create an instance from the mapping file provided
      */
@@ -103,6 +104,11 @@ public:
 
     /** \brief Calculate dipoles from atomistic frame */
     void calcDipoles(const Frame &aa_frame, Frame &cg_frame);
+
+    std::vector<BeadMap> getMapping() const
+    {
+        return mapping_;
+    }
 };
 
 #endif

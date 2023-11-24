@@ -31,7 +31,7 @@ public:
 
     /** \brief Copy constructor */
     LightArray<T>(const LightArray &other)
-        : safe_(other.safe_), size_(other.size_), array_(other.array_)
+        : array_(other.array_), size_(other.size_), safe_(other.safe_)
     {
     }
 

@@ -10,7 +10,7 @@
 
 class XTCInput : public TrjInput
 {
-protected:
+private:
     /** \brief Stores atoms from XTC. */
     rvec *x_ = nullptr;
     /** \brief Stores box vectors from XTC. */

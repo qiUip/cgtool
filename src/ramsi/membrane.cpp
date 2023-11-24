@@ -310,8 +310,8 @@ void Membrane::curvature(const Frame &frame)
     const double inv_h2_x = 1. / (step_[0] * step_[0]);
     const double inv_h2_y = 1. / (step_[1] * step_[1]);
 
-    double curv_x_avg = 0.;
-    double curv_y_avg = 0.;
+    // double curv_x_avg = 0.;
+    // double curv_y_avg = 0.;
 
     // Calculate average z coord on grid
     for (int i = 0; i < grid_; i++)
@@ -334,13 +334,13 @@ void Membrane::curvature(const Frame &frame)
             respect_to_y(i, j) = inv_h2_y * (avg_z(i, j + 1) + avg_z(i, j - 1) -
                                              2 * avg_z(i, j));
 
-            curv_x_avg += respect_to_x(i, j);
-            curv_y_avg += respect_to_y(i, j);
+            // curv_x_avg += respect_to_x(i, j);
+            // curv_y_avg += respect_to_y(i, j);
         }
     }
 
-    curv_x_avg /= grid_ * grid_;
-    curv_y_avg /= grid_ * grid_;
+    // curv_x_avg /= grid_ * grid_;
+    // curv_y_avg /= grid_ * grid_;
 
     for (int i = 0; i < grid_; i++)
     {

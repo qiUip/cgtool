@@ -3,11 +3,10 @@
 //
 
 #include "XTCInput.h"
-
-#include <cstdio>
-
 #include "small_functions.h"
 #include "xdrfile_xtc.h"
+
+#include <cstdio>
 
 using std::printf;
 using std::string;

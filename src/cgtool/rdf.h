@@ -16,8 +16,8 @@ class RDF
 {
 protected:
     const std::vector<Residue> &residues_;
-    double cutoff_  = 2.;
-    int resolution_ = 100;
+    const double cutoff_  = 2.;
+    const int resolution_ = 100;
 
     int grid_ = 200;
 

@@ -71,7 +71,7 @@ enum class BoxType
  */
 class Frame
 {
-protected:
+private:
     /** Has the XTC output been setup yet? */
     bool outputSetup_ = false;
     /** Name of the Frame; taken from comment in the GRO file */
@@ -91,9 +91,10 @@ protected:
     /** \brief Write the minimal GROMACS TOP file */
     void writeTOP(const std::string &filename);
 
-public:
     /** Has the Frame been properly setup yet? */
     bool isSetup_ = false;
+
+public:
     /** Vector of Atoms; Each Atom contains position and type data */
     std::vector<Atom> atoms_;
     /** The number of atoms stored in this frame */
@@ -164,6 +165,16 @@ public:
 
     /** \brief Print box vectors */
     void printBox() const;
+
+    bool getIsSetup()
+    {
+        return isSetup_;
+    }
+
+    void setIsSetup(bool isSetup)
+    {
+        isSetup_ = isSetup;
+    }
 };
 
 #endif

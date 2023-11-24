@@ -57,7 +57,7 @@ public:
     void calcBondsInternal(Frame &frame);
 
     /** \brief Perform Boltzmann Inversion on all bond_structs. */
-    void BoltzmannInversion();
+    void boltzmannInversion();
 
     /** \brief Calculate bond averages without full Boltzmann Inversion */
     void calcAvgs();

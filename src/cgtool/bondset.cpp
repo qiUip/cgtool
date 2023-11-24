@@ -20,7 +20,7 @@ using std::vector;
 
 BondSet::BondSet(const string &cfgname, const vector<Residue> &residues,
                  const PotentialType potentials[3], const double temp)
-    : residues_(residues), temp_(temp)
+    : temp_(temp), residues_(residues)
 {
     fromFile(cfgname);
 }
@@ -51,25 +51,25 @@ void BondSet::fromFile(const string &filename)
     while (parser.getLineFromSection("length", tokens, 2))
     {
         bonds_.emplace_back(BondStruct(BondType::LENGTH));
-        bonds_.back().atomNums_[0] = beadNums_[tokens[0]];
-        bonds_.back().atomNums_[1] = beadNums_[tokens[1]];
+        bonds_.back().setAtomNum(0, beadNums_[tokens[0]]);
+        bonds_.back().setAtomNum(1, beadNums_[tokens[1]]);
     }
 
     while (parser.getLineFromSection("angle", tokens, 3))
     {
         angles_.emplace_back(BondStruct(BondType::ANGLE));
-        angles_.back().atomNums_[0] = beadNums_[tokens[0]];
-        angles_.back().atomNums_[1] = beadNums_[tokens[1]];
-        angles_.back().atomNums_[2] = beadNums_[tokens[2]];
+        angles_.back().setAtomNum(0, beadNums_[tokens[0]]);
+        angles_.back().setAtomNum(1, beadNums_[tokens[1]]);
+        angles_.back().setAtomNum(2, beadNums_[tokens[2]]);
     }
 
     while (parser.getLineFromSection("dihedral", tokens, 4))
     {
         dihedrals_.emplace_back(BondStruct(BondType::DIHEDRAL));
-        dihedrals_.back().atomNums_[0] = beadNums_[tokens[0]];
-        dihedrals_.back().atomNums_[1] = beadNums_[tokens[1]];
-        dihedrals_.back().atomNums_[2] = beadNums_[tokens[2]];
-        dihedrals_.back().atomNums_[3] = beadNums_[tokens[3]];
+        dihedrals_.back().setAtomNum(0, beadNums_[tokens[0]]);
+        dihedrals_.back().setAtomNum(1, beadNums_[tokens[1]]);
+        dihedrals_.back().setAtomNum(2, beadNums_[tokens[2]]);
+        dihedrals_.back().setAtomNum(3, beadNums_[tokens[3]]);
     }
 }
 
@@ -99,19 +99,19 @@ void BondSet::calcBondsInternal(Frame &frame)
         {
             const double val = bond.bondLength(frame, offset);
             if (!std::isinf(val) && !std::isnan(val))
-                bond.values_.push_back(val);
+                bond.getValues().push_back(val);
         }
         for (BondStruct &bond : angles_)
         {
             const double val = bond.bondAngle(frame, offset);
             if (!std::isinf(val) && !std::isnan(val))
-                bond.values_.push_back(val);
+                bond.getValues().push_back(val);
         }
         for (BondStruct &bond : dihedrals_)
         {
             const double val = bond.bondDihedral(frame, offset);
             if (!std::isinf(val) && !std::isnan(val))
-                bond.values_.push_back(val);
+                bond.getValues().push_back(val);
         }
         numMeasures_++;
     }
@@ -119,7 +119,7 @@ void BondSet::calcBondsInternal(Frame &frame)
 
 // Angles can't just be averaged like this - they wrap around
 // Fine as approximation though, we won't deal much with angles close to 0
-void BondSet::BoltzmannInversion()
+void BondSet::boltzmannInversion()
 {
     if (numMeasures_ > 0)
     {
@@ -131,11 +131,11 @@ void BondSet::BoltzmannInversion()
         return;
     }
     BoltzmannInverter bi(temp_);
-    for (BondStruct &bond : bonds_)
+    for (auto &bond : bonds_)
         bi.calculate(bond);
-    for (BondStruct &bond : angles_)
+    for (auto &bond : angles_)
         bi.calculate(bond);
-    for (BondStruct &bond : dihedrals_)
+    for (auto &bond : dihedrals_)
         bi.calculate(bond);
 }
 
@@ -151,12 +151,12 @@ void BondSet::calcAvgs()
         return;
     }
     BoltzmannInverter bi(temp_);
-    for (BondStruct &bond : bonds_)
-        bond.avg_ = bi.statisticalMoments(bond.values_);
-    for (BondStruct &bond : angles_)
-        bond.avg_ = bi.statisticalMoments(bond.values_);
-    for (BondStruct &bond : dihedrals_)
-        bond.avg_ = bi.statisticalMoments(bond.values_);
+    for (auto &bond : bonds_)
+        bond.setAvg(bi.statisticalMoments(bond.getValues()));
+    for (auto &bond : angles_)
+        bond.setAvg(bi.statisticalMoments(bond.getValues()));
+    for (auto &bond : dihedrals_)
+        bond.setAvg(bi.statisticalMoments(bond.getValues()));
 }
 
 void BondSet::writeCSV(const int num_molecules) const
@@ -180,19 +180,20 @@ void BondSet::writeCSV(const int num_molecules) const
     if (num_molecules > 0 && numMeasures_ > num_molecules)
         scale =
             static_cast<int>(numMeasures_ / static_cast<double>(num_molecules));
+    std::cout << "this gets called!!! \n;";
 
     for (int i = 0; i < numMeasures_; i += scale)
     {
-        for (const BondStruct &bond : bonds_)
-            fprintf(f_bond, "%12.3f", bond.values_[i]);
+        for (auto &bond : bonds_)
+            fprintf(f_bond, "%12.3f", bond.getValue(i));
         fprintf(f_bond, "\n");
 
-        for (const BondStruct &bond : angles_)
-            fprintf(f_angle, "%12.3f", bond.values_[i]);
+        for (auto &bond : angles_)
+            fprintf(f_angle, "%12.3f", bond.getValue(i));
         fprintf(f_angle, "\n");
 
-        for (const BondStruct &bond : dihedrals_)
-            fprintf(f_dihedral, "%12.3f", bond.values_[i]);
+        for (auto &bond : dihedrals_)
+            fprintf(f_dihedral, "%12.3f", bond.getValue(i));
         fprintf(f_dihedral, "\n");
     }
     printf("Written %'d molecules to CSV\n", numMeasures_ / scale);

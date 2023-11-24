@@ -12,7 +12,7 @@
 
 class GROInput : public TrjInput
 {
-protected:
+private:
     /** \brief Input file stream. */
     std::ifstream file_;
 

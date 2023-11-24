@@ -6,7 +6,6 @@
 #define RAMSI_RAMSI_H
 
 #include "common.h"
-
 #include "membrane.h"
 
 class Ramsi : public Common
