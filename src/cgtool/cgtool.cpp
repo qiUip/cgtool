@@ -1,8 +1,8 @@
 #include "cgtool.h"
-#include "GROOutput.h"
-#include "LammpsDataOutput.h"
-#include "LammpsTrjOutput.h"
-#include "XTCOutput.h"
+#include "gro_output.h"
+#include "xtc_output.h"
+#include "lammps_data_output.h"
+#include "lammps_trj_output.h"
 #include "itp_writer.h"
 #include "version.h"
 #include <boost/algorithm/string.hpp>

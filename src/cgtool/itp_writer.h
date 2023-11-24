@@ -17,7 +17,7 @@
  */
 class ITPWriter
 {
-protected:
+private:
     /** Pointer to the ITP file being written to */
     FILE *itp_;
     /** The name of the ITP file */

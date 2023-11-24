@@ -7,7 +7,7 @@
 
 class Histogram
 {
-protected:
+private:
     int size_;
     int *array_     = nullptr;
     bool fast_      = false;

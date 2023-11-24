@@ -14,7 +14,7 @@
 
 class RDF
 {
-protected:
+private:
     const std::vector<Residue> &residues_;
     const double cutoff_  = 2.;
     const int resolution_ = 100;

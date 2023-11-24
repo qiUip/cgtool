@@ -2,7 +2,7 @@
 // Created by james on 24/08/15.
 //
 
-#include "XTCInput.h"
+#include "xtc_input.h"
 #include "small_functions.h"
 #include "xdrfile_xtc.h"
 

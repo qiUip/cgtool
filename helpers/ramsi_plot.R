@@ -1,6 +1,6 @@
 # Plot membrane thickness
 dat = read.table("thickness_avg.dat")
-names(dat) = seq(1,200)
+names(dat) = seq(1,100)
 library(ggplot2)
 library(reshape2)
 m = as.matrix(dat)

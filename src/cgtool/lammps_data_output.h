@@ -9,7 +9,7 @@
 
 class LammpsDataOutput : public TrjOutput
 {
-protected:
+private:
     /** \brief Output file handle. */
     FILE *file_ = nullptr;
 

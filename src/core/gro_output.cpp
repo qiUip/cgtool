@@ -2,12 +2,11 @@
 // Created by james on 21/08/15.
 //
 
-#include "GROOutput.h"
+#include "gro_output.h"
+#include "small_functions.h"
 
 #include <cstdio>
 #include <stdexcept>
-
-#include "small_functions.h"
 
 using std::string;
 
@@ -47,7 +46,7 @@ int GROOutput::closeFile()
 int GROOutput::writeFrame(const Frame &frame)
 {
     // Print atoms
-    Residue &res = frame.residues_[0];
+    Residue &res = frame.getResidues()[0];
     for (int i = 0; i < natoms_; i++)
     {
         const Atom &atom = frame.atoms_[i];

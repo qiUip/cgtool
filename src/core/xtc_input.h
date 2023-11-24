@@ -5,7 +5,7 @@
 #ifndef CGTOOL_XTCINPUT_H
 #define CGTOOL_XTCINPUT_H
 
-#include "TrjInput.h"
+#include "trj_input.h"
 #include "xdrfile.h"
 
 class XTCInput : public TrjInput

@@ -270,13 +270,13 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
                 }
             }
 
-            if (is_protein)
-            {
-                // #pragma omp atomic update
-                //                 resPPL["PROT"]++;
-            }
-            else
-            {
+            // if (is_protein)
+            // {
+            //     // #pragma omp atomic update
+            //     //                 resPPL["PROT"]++;
+            // }
+            // else
+            if (!is_protein){
                 const int close_ref = ref_lookup[closest_int];
                 closest(i, j)       = close_ref;
                 const double tmp    = pairs.at(close_ref);

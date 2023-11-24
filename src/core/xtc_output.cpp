@@ -2,8 +2,7 @@
 // Created by james on 20/08/15.
 //
 
-#include "XTCOutput.h"
-
+#include "xtc_output.h"
 #include "xdrfile_xtc.h"
 
 #include "small_functions.h"
