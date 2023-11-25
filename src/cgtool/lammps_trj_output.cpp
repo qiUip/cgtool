@@ -51,7 +51,7 @@ int LammpsTrjOutput::writeFrame(const Frame &frame)
     }
 
     // Print headers
-    fprintf(file_, "ITEM: TIMESTEP\n%d\n", frame.num_);
+    fprintf(file_, "ITEM: TIMESTEP\n%d\n", frame.getNum());
     fprintf(file_, "ITEM: NUMBER OF ATOMS\n%d\n", frame.numAtoms_);
     fprintf(file_, "ITEM: BOX BOUNDS pp pp pp\n%f %f\n%f %f\n%f %f\n", -box[0],
             box[0], -box[1], box[1], -box[2], box[2]);

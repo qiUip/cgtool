@@ -158,7 +158,7 @@ double Membrane::thickness(const Frame &frame, const bool with_reset)
     }
 
     avg_thickness /= 2;
-    fprintf(avgFile_, "%8.3f%8.3f\n", frame.time_, avg_thickness);
+    fprintf(avgFile_, "%8.3f%8.3f\n", frame.getTime(), avg_thickness);
 
     numFrames_++;
     return avg_thickness;
@@ -230,6 +230,7 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
     // make a copy of frame.boxDiag_ to avoid having to share the whole class
     // object between threads.
     std::array<double, 3> boxDiag = frame.boxDiag_;
+// #pragma omp target teams distribute parallel for default(none)                                         \
 
 #pragma omp parallel for default(none)                                         \
     shared(boxDiag, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,    \

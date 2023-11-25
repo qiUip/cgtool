@@ -190,9 +190,9 @@ bool CGMap::apply(const Frame &aa_frame, Frame &cg_frame)
     bool status = true;
     if (!cg_frame.getIsSetup())
         throw std::logic_error("CG frame isn't setup");
-    cg_frame.num_  = aa_frame.num_;
-    cg_frame.time_ = aa_frame.time_;
-    cg_frame.step_ = aa_frame.step_;
+    cg_frame.setNum(aa_frame.getNum());
+    cg_frame.setTime(aa_frame.getTime());
+    cg_frame.setStep(aa_frame.getStep());
 
     for (int i = 0; i < 3; i++)
     {

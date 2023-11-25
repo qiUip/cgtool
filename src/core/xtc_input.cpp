@@ -70,8 +70,8 @@ int XTCInput::readFrame(Frame &frame)
     //    copyCoordsIntoAtoms();
 
     // Copy data into Frame
-    frame.step_ = step_;
-    frame.time_ = time_;
+    frame.setStep(step_);
+    frame.setTime(time_);
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
