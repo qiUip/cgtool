@@ -2,8 +2,8 @@
 #include "small_functions.h"
 #include "version.h"
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 int main(const int argc, const char *argv[])
 {
