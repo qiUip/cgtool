@@ -232,14 +232,20 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
     std::array<double, 3> boxDiag = frame.boxDiag_;
     // Create a vector of tuples to store start and end values
     std::vector<std::tuple<int, int, std::string>> startEndVector;
-    for (const auto& res: residues_) {
+    for (const auto &res : residues_)
+    {
         startEndVector.emplace_back(res.start, res.end, res.resname);
     }
-// #pragma omp target teams distribute parallel for default(none)                                         \
+
+// #pragma omp target map(tofrom : boxDiag, ref, pairs, closest, ref_cache,       \
+//                            ref_lookup, prot_cache, resPPL, box_diag2, ref_len, \
+//                            prot_len, startEndVector, sum, n_vals)              \
+//     reduction(+ : sum, n_vals)
+// #pragma omp parallel for
 
 #pragma omp parallel for default(none)                                         \
     shared(boxDiag, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,    \
-               resPPL, box_diag2, ref_len, prot_len, startEndVector)                           \
+               resPPL, box_diag2, ref_len, prot_len, startEndVector)           \
     reduction(+ : sum, n_vals)
     for (int i = 0; i < grid_; i++)
     {
@@ -279,12 +285,6 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
                 }
             }
 
-            // if (is_protein)
-            // {
-            //     // #pragma omp atomic update
-            //     //                 resPPL["PROT"]++;
-            // }
-            // else
             if (!is_protein)
             {
                 const int close_ref = ref_lookup[closest_int];
@@ -292,7 +292,8 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
                 const double tmp    = pairs.at(close_ref);
                 for (const auto &res : startEndVector)
                 {
-                    if (close_ref >= std::get<0>(res) && close_ref < std::get<1>(res))
+                    if (close_ref >= std::get<0>(res) &&
+                        close_ref < std::get<1>(res))
                     {
 #pragma omp atomic update
                         resPPL[std::get<2>(res)]++;

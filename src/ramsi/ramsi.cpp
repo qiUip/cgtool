@@ -91,7 +91,7 @@ void Ramsi::setupObjects()
     {
         // If not mapping make both frames point to the same thing
         cgFrame_    = frame_;
-        cgResidues_ = residues_;
+        // cgResidues_ = residues_;
     }
 
     membrane_ =
