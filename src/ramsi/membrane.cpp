@@ -227,10 +227,9 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
 
     double sum = 0;
     int n_vals = 0;
-    // make a copy of frame.boxDiag_ to avoid having to share the whole class
-    // object between threads.
+    // make a copy of frame.boxDiag_ to avoid having to share the frame between
+    // threads.
     std::array<double, 3> boxDiag = frame.boxDiag_;
-// #pragma omp target teams distribute parallel for default(none)                                         \
 
 #pragma omp parallel for default(none)                                         \
     shared(boxDiag, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,    \
