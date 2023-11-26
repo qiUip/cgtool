@@ -230,11 +230,16 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
     // make a copy of frame.boxDiag_ to avoid having to share the whole class
     // object between threads.
     std::array<double, 3> boxDiag = frame.boxDiag_;
+    // Create a vector of tuples to store start and end values
+    std::vector<std::tuple<int, int, std::string>> startEndVector;
+    for (const auto& res: residues_) {
+        startEndVector.emplace_back(res.start, res.end, res.resname);
+    }
 // #pragma omp target teams distribute parallel for default(none)                                         \
 
 #pragma omp parallel for default(none)                                         \
     shared(boxDiag, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,    \
-               resPPL, box_diag2, ref_len, prot_len)                           \
+               resPPL, box_diag2, ref_len, prot_len, startEndVector)                           \
     reduction(+ : sum, n_vals)
     for (int i = 0; i < grid_; i++)
     {
@@ -285,12 +290,12 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
                 const int close_ref = ref_lookup[closest_int];
                 closest(i, j)       = close_ref;
                 const double tmp    = pairs.at(close_ref);
-                for (const Residue &res : residues_)
+                for (const auto &res : startEndVector)
                 {
-                    if (close_ref >= res.start && close_ref < res.end)
+                    if (close_ref >= std::get<0>(res) && close_ref < std::get<1>(res))
                     {
 #pragma omp atomic update
-                        resPPL[res.resname]++;
+                        resPPL[std::get<2>(res)]++;
                     }
                 }
 
