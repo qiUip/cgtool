@@ -3,13 +3,11 @@
 //
 
 #include "common.h"
+#include "small_functions.h"
 
 #include <iostream>
-
 #include <locale.h>
 #include <sysexits.h>
-
-#include "small_functions.h"
 
 #ifdef CMD_SIMPLE
 #include "cmd_simple.h"
