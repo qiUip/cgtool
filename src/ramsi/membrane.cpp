@@ -158,7 +158,7 @@ double Membrane::thickness(const Frame &frame, const bool with_reset)
     }
 
     avg_thickness /= 2;
-    fprintf(avgFile_, "%8.3f%8.3f\n", frame.time_, avg_thickness);
+    fprintf(avgFile_, "%8.3f%8.3f\n", frame.getTime(), avg_thickness);
 
     numFrames_++;
     return avg_thickness;
@@ -227,9 +227,12 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
 
     double sum = 0;
     int n_vals = 0;
+    // make a copy of frame.boxDiag_ to avoid having to share the frame between
+    // threads.
+    std::array<double, 3> boxDiag = frame.boxDiag_;
 
 #pragma omp parallel for default(none)                                         \
-    shared(frame, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,      \
+    shared(boxDiag, ref, pairs, closest, ref_cache, ref_lookup, prot_cache,    \
                resPPL, box_diag2, ref_len, prot_len)                           \
     reduction(+ : sum, n_vals)
     for (int i = 0; i < grid_; i++)
@@ -247,7 +250,7 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
             for (int k = 0; k < ref_len; k++)
             {
                 const double dist2 =
-                    distSqrPlane(grid_coords, ref_cache[k], frame.boxDiag_);
+                    distSqrPlane(grid_coords, ref_cache[k], boxDiag);
                 if (dist2 < min_dist2)
                 {
                     closest_int = k;
@@ -260,8 +263,8 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
             {
                 for (int k = 0; k < prot_len; k++)
                 {
-                    const double dist2 = distSqrPlane(
-                        grid_coords, prot_cache[k], frame.boxDiag_);
+                    const double dist2 =
+                        distSqrPlane(grid_coords, prot_cache[k], boxDiag);
                     if (dist2 < min_dist2)
                     {
                         is_protein = true;
@@ -276,7 +279,8 @@ double Membrane::closestLipid(const Frame &frame, const vector<int> &ref,
             //     //                 resPPL["PROT"]++;
             // }
             // else
-            if (!is_protein){
+            if (!is_protein)
+            {
                 const int close_ref = ref_lookup[closest_int];
                 closest(i, j)       = close_ref;
                 const double tmp    = pairs.at(close_ref);

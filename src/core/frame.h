@@ -94,6 +94,12 @@ private:
     /** Has the Frame been properly setup yet? */
     bool isSetup_ = false;
 
+    /** The simulation time of this frame, in picoseconds */
+    float time_ = 0.f;
+    /** The number of this Frame, starting at 0 */
+    int num_ = 0;
+    /** The simulation step corresponding to this frame */
+    int step_ = 0;
     std::vector<Residue> &residues_;
 
 public:
@@ -101,12 +107,6 @@ public:
     std::vector<Atom> atoms_;
     /** The number of atoms stored in this frame */
     int numAtoms_ = 0;
-    /** The simulation time of this frame, in picoseconds */
-    float time_ = 0.f;
-    /** The number of this Frame, starting at 0 */
-    int num_ = 0;
-    /** The simulation step corresponding to this frame */
-    int step_ = 0;
     /** Size of the simulation box */
     float box_[3][3];
     std::array<double, 3> boxDiag_;
@@ -175,6 +175,36 @@ public:
     void setIsSetup(bool isSetup)
     {
         isSetup_ = isSetup;
+    }
+
+    float getTime() const
+    {
+        return time_;
+    }
+
+    void setTime(float time)
+    {
+        time_ = time;
+    }
+
+    int getNum() const
+    {
+        return num_;
+    }
+
+    void setNum(int num)
+    {
+        num_ = num;
+    }
+
+    int getStep() const
+    {
+        return step_;
+    }
+
+    void setStep(int step)
+    {
+        step_ = step;
     }
 
     std::vector<Residue> &getResidues() const

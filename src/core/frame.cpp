@@ -6,10 +6,10 @@
 #include <sysexits.h>
 
 #include "gro_input.h"
-#include "xtc_input.h"
 #include "parser.h"
 #include "small_functions.h"
 #include "trj_output.h"
+#include "xtc_input.h"
 
 using std::endl;
 using std::map;

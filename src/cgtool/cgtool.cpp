@@ -1,10 +1,10 @@
 #include "cgtool.h"
 #include "gro_output.h"
-#include "xtc_output.h"
+#include "itp_writer.h"
 #include "lammps_data_output.h"
 #include "lammps_trj_output.h"
-#include "itp_writer.h"
 #include "version.h"
+#include "xtc_output.h"
 #include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <string>

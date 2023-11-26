@@ -2,8 +2,8 @@
 #include "small_functions.h"
 #include "version.h"
 #include <iostream>
-#include <vector>
 #include <string>
+#include <vector>
 
 int main(const int argc, const char *argv[])
 {
@@ -111,7 +111,7 @@ void Ramsi::mainLoop()
     {
         thickness_.push_back(membrane_->thickness(*cgFrame_));
         membrane_->curvature(*cgFrame_);
-        membrane_->printCSVAreaPerLipid(cgFrame_->time_);
+        membrane_->printCSVAreaPerLipid(cgFrame_->getTime());
     }
 
     if (settings_["mem"]["export"] > 0)
@@ -134,7 +134,7 @@ void Ramsi::postProcess()
         membrane_->normalize(0);
         membrane_->printCSV("thickness_avg");
         membrane_->printCSVCurvature("curvature_final");
-        membrane_->printCSVAreaPerLipid(cgFrame_->time_);
+        membrane_->printCSVAreaPerLipid(cgFrame_->getTime());
     }
     double mean = vector_mean(thickness_);
     double se   = vector_stderr(thickness_);
