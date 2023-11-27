@@ -135,6 +135,18 @@ if(DOXYGEN_FOUND)
         COMMENT "Generating API documentation with Doxygen" VERBATIM)
 endif(DOXYGEN_FOUND)
 
+find_package(LATEX)
+if(LATEX_FOUND)
+  file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc)
+  add_custom_target(manual
+    COMMAND latexmk -pdf ${CMAKE_CURRENT_SOURCE_DIR}/Manual.tex
+    COMMAND latexmk -c ${CMAKE_CURRENT_SOURCE_DIR}/Manual.tex
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/doc
+    COMMENT "Building LaTeX PDF manual" VERBATIM)
+else()
+  message(WARNING "LaTeX not found. PDF manual will not be available.")
+endif(LATEX_FOUND)
+
 # Get Git revision
 execute_process(
   COMMAND ${GIT_EXECUTABLE} rev-parse --short HEAD

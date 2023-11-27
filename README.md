@@ -38,6 +38,7 @@ cd cgtool && mkdir build && cd build
 * From the build directory execute `cmake ..` or alternatively use the terminal-based GUI with `ccmake ..`
 * To build the executable and library execute `make`.  After compilation the executable can be found in the 'bin' directory and the library in the 'lib' directory.
 * To build the developer documentation execute `make doc` (requires Doxygen)
+* To build the PDF user documentation execute `make manual` (requires a LaTeX distribution with Latexmk)
 
 ## Use
 ### CGTOOL
